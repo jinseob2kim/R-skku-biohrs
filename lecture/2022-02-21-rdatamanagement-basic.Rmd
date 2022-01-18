@@ -1,0 +1,768 @@
+---
+title: "R 데이터 매니지먼트: base"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+
+<style type="text/css">
+details:hover { cursor: pointer }
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, fig.align = "center")
+library(rmarkdown);library(knitr);library(magrittr)
+```
+
+[김진섭](https://github.com/jinseob2kim) 대표는 4월 2일(목) 부터 6회에 걸쳐, **[서울대병원 진단검사의학과](http://www.snuhlab.org/main/main.aspx) 의국원들의 통계분석 능력 함양을 위한 맞춤 교육** 이라는 주제로 R 교육을 진행할 예정입니다. 1주차 강의록을 미리 공유합니다.
+
+
+
+## 시작하기 전에 
+
+**[R](https://www.r-project.org/)** 데이터 매니지먼트 방법은 크게 3 종류가 있다.  
+
+1. 원래의 **[R](https://www.r-project.org/)** 문법을 이용한 방법으로  **[과거 홈페이지](https://jinseob2kim.github.io/rbasic.html)**^[https://jinseob2kim.github.io/rbasic.html]에 정리했었다.  
+  
+
+2. **[tidyverse](https://www.tidyverse.org/)**는 직관적인 코드를 작성할 수 있는 점을 장점으로 원래의 **[R](https://www.r-project.org/)** 문법을 빠르게 대체하고 있다. **[본 블로그](https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/)**에 정리 내용이 있다.  
+  
+
+3. **[data.table](https://github.com/Rdatatable/data.table/wiki)** 패키지는 빠른 실행속도를 장점으로 **[tidyverse](https://www.tidyverse.org/)** 의 득세 속에서 살아남았으며, 역시  **[과거 홈페이지](https://jinseob2kim.github.io/radv1.html)**^[https://jinseob2kim.github.io/radv1.html]에 정리한 바 있다. 
+
+
+본 강의는 이중 첫 번째에 해당하며 2주차에 **[tidyverse](https://www.tidyverse.org/)** 를 다룰 것이다. **[data.table](https://github.com/Rdatatable/data.table/wiki)** 은 이번 교육에는 포함시키지 않았는데, R에 익숙해지면서 느린 속도가 점점 거슬린다면 **[data.table](https://github.com/Rdatatable/data.table/wiki)** 을 시작할 때이다.
+
+
+실습은 클라우드 환경인 [RStudio cloud](https://rstudio.cloud/) 를 이용하여 진행한다. 회원가입 후, 아래를 따라 강의자료가 포함된 실습환경을 생성하자.
+
+
+> 1. https://rstudio.cloud 회원 가입
+> 2. https://rstudio.cloud/spaces/53975/join?access_code=kuFNlbt%2FbSj6DH%2FuppMdXzvU4e1EPrQNgNsFAQBf 들어가서 __*"Join Space"*__ 클릭
+> 3. 위쪽 __*"Projects"*__ 클릭 후, __*"New Project"*__ 를 눌러 __*"New Project from Git Repo"*__ 를 선택 후, Repo 주소 **https://github.com/jinseob2kim/lecture-snuhlab** 입력.
+
+```{r, fig.cap="Project 생성", echo=F}
+include_graphics("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/rstudiocloud2.png")
+```
+
+
+개인 PC에서 실습을 원한다면 http://www.r-project.org 와 https://rstudio.com/products/rstudio/download/#download 에서 **[R](https://www.r-project.org/)**과 **[RStudio](https://rstudio.com/)** 를 설치하자.
+
+
+## 전체 강의 일정
+
+|회차| 일시  | 주제  |
+|---|---|---|
+|**1**| **4월 2일(목) 11-13시**  | **R 데이터 매니지먼트 [기초](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic)**  |
+|2|  4월 14일(화) 11-13시 |  R 데이터 매니지먼트 최근: [tidyverse](https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/) |
+|3|  4월 28일(화) 11-13시 | R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
+|4|  5월 12일(화) 11-13시 | [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/)  |
+|5|  5월 26일(화) 11-13시 | 회귀분석, 생존분석  |
+|6|  6월 9일(화) 11-13시 | R로 논문쓰기: [rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/) |
+
+
+## *R* 기초연산 : 벡터(vector) 
+
+*R* 의 기본 연산단위는 벡터이며, `x <- c(1, 2, 3)` 은 1,2,3 으로 이루어진 길이 3인 벡터를 `x` 에 저장한다. 대입연산자는 `=` 와 `<-` 둘 다 가능하지만 함수의 인자로도 쓰이는 `=` 와 구별하기 위해 `<-` 를 권장한다. 자주 쓰는 연산을 실습하자.
+
+```{r}
+x <- c(1, 2, 3, 4, 5, 6)            ## vector of variable
+y <- c(7, 8, 9, 10, 11, 12)
+x + y                                  
+x * y
+sqrt(x)                            ## root
+sum(x)                                
+diff(x)                            ## difference
+mean(x)                            ## mean  
+var(x)                             ## variance
+sd(x)                              ## standard deviation
+median(x)                          ## median
+IQR(x)                             ## inter-quantile range
+max(x)                             ## max value
+which.max(x)                       ## order of max value
+max(x, y)                          ## max value among x & y
+length(x)                          
+```
+
+`max(x, y)` 는 x, y 각각의 최대값이 아닌, **전체에서 최대인 값 1개**를 보여줌을 기억하자. 잠시 후 각각의 최대값 구하는 연습문제가 나온다.
+
+
+벡터에서 특정 항목을 골라내려면 그것의 **위치** 혹은 **조건문**을 이용한다. 
+
+```{r}
+x[2]                               ## 2 번째
+x[-2]                              ## 2 번째만 빼고
+x[1:3]                             ## 1-3 번째
+x[c(1, 2, 3)]                      ## 동일 
+x[c(1, 3, 4, 5, 6)]                ## 1, 3, 4, 5, 6  번째
+x >= 4                             ## 각 항목이 4 이상인지 TRUE/FALSE
+sum(x >= 4)                        ## TRUE 1, FALSE 0 인식 
+x[x >= 4]                          ## TRUE 인 것들만, 즉 4 이상인 것들         
+sum(x[x >= 4])                     ## 4 이상인 것들만 더하기. 
+x %in% c(1, 3, 5)                  ## 1, 3, 5 중 하나에 속하는지 TRUE/FALSE
+x[x %in% c(1, 3, 5)]               
+```
+
+
+### 벡터만들기
+
+`seq` 로 일정 간격인, `rep` 로 항목들이 반복되는 벡터를 만들 수 있다. 
+
+```{r}
+v1 <- seq(-5, 5, by = .2); v1             ## Sequence
+v2 <- rep(1, 3); v2                       ## Repeat
+v3 <- rep(c(1, 2, 3), 2); v3              ## Repeat for vector
+v4 <- rep(c(1, 2, 3), each = 2); v4       ## Repeat for vector : each
+```
+
+
+### `for`, `if/else`, `ifelse` 문 
+
+`for` loop 는 같은 작업을 반복할 때 이용하며 `while` 도 비슷한 의미이다. 예시를 통해 배워보자.
+
+```{r}
+for (i in 1:3){
+  print(i)
+}
+i <- 0
+for (j in c(1, 2, 4, 5, 6)){
+  i <- i + j
+}
+i
+```
+
+`if` 와 `else` 는 조건문을 다룬다. **`else` 나 `else if` 문은 선행 조건문의 마지막과 같은 줄**이어야 함을 기억하자.
+
+```{r}
+x <- 5
+if (x >= 3 ){
+  x <- x + 3
+}
+x
+x <- 5
+if (x >= 10){
+  print("High")
+} else if (x >= 5){
+  print("Medium")
+} else {
+  print("Low")
+}                                          ## else if, else 주의: 반드시 } 와 같은 줄에 위치하도록.
+```
+
+`ifelse` 는 **벡터화**된 `if/else` 문으로 벡터의 각 항목마다 조건문을 적용하는데, 엑셀의 `if` 문과 비슷하다. 
+
+```{r}
+x <- 1:6
+y <- ifelse(x >= 4, "Yes", "No")           ## ifelse (조건,참일때,거짓일때)
+y
+```
+
+
+### 함수 만들기 
+
+막 **R**을 배우는 단계에서는 함수를 만들어 쓸 일이 거의 없겠지만, 결측치 포함된 데이터에서 평균이나 분산을 구할 때 귀찮을 수 있다. **R**은 결측치가 하나라도 포함되면 평균값, 분산값으로 `NA`를 출력하기 때문이다. 이를 해결하기 위해서라도 아래처럼 기초 함수 만드는 법은 알고 있는 것이 좋다. 
+
+
+```{r}
+x <- c(1:10, 12, 13, NA, NA, 15, 17)      ## 결측치가 포함되어 있다면..
+mean(x)                                           
+mean0 <- function(x){
+  mean(x, na.rm = T)
+}                                         ## mean함수의 na.rm 옵션을 TRUE로 바꿈. default는 F
+mean0 <- function(x){mean(x, na.rm = T)}  ## 한줄에 쓸 수도 있다. 
+mean0(x)
+```
+
+둘 이상의 변수를 포함한 함수도 다음과 같이 만들 수 있다.
+
+```{r}
+twomean <- function(x1, x2){
+  a <- (x1 + x2)/2
+  a
+}
+twomean(4, 6)
+```
+
+
+### Apply 문 : `apply`, `sapply`, `lapply`
+
+벡터를 다루는 연산을 잘 활용하면, 벡터의 각 항목에 대해 `for` loop 을 쓰는 것보다 간편하게 코드를 작성할 수 있다. 행렬에서 행마다 평균을 구하는 예를 살펴보자.
+
+```{r}
+mat <- matrix(1:20, nrow = 4, byrow = T)   ## 4행 5열, byrow = T : 행부터 채운다. 
+mat
+```
+
+모든 행에 대해 `for` loop 을 이용, 평균을 구하여 저장하는 코드는 아래와 같다.
+
+```{r}
+out <- NULL                                ## 빈 벡터, 여기에 하나씩 붙여넣는다.
+for (i in 1:nrow(mat)){
+  out <- c(out, mean(mat[i, ]))
+}
+out
+```
+
+처음에 빈 벡터를 만들고 여기에 결과를 붙여가는 모습이 번거로워 보인다. `sapply` 또는 `lapply` 를 사용하면 행 또는 열 단위 연산을 간단히 수행할 수 있다.
+
+```{r}
+sapply(1:nrow(mat), function(x){mean(mat[x, ])})             ## Return vector
+lapply(1:nrow(mat), function(x){mean(mat[x, ])})             ## Return list type
+unlist(lapply(1:nrow(mat), function(x){mean(mat[x, ])}))     ## Same to sapply
+```
+
+처음에 빈 벡터를 만들고, 이어붙이는 과정이 생략되어 간단한 코드가 되었다. **list** 는 벡터보다 상위개념으로 모든 것을 담을 수 있는 큰 그릇에 비유할 수 있는데, 본 강의에서는 `unlist` 를 취하면 벡터나 행렬을 얻게 된다는 정도만 언급하고 넘어가겠다. 사실 행렬의 행/열 단위 연산은 `apply` 혹은 `row***`, `col***` 시리즈의 함수가 따로 있어, 더 간단히 이용할 수 있다.
+
+```{r}
+apply(mat, 1, mean)                                          ## 1: 행
+rowMeans(mat)                                                ## 동일
+rowSums(mat)                                                 ## 행별로 합
+apply(mat, 2, mean)                                          ## 2: 열
+colMeans(mat)                                                ## 열별로 합
+```
+
+#### 연습문제 1
+
+`sapply`나 `lapply`를 이용하여, 아래 두 벡터의 최대값을 각각 구하여라.
+
+```{r}
+x <- 1:6
+y <- 7:12
+```
+
+<details>
+<summary>정답 보기</summary>
+```{r cars}
+lapply(list(x, y), max)
+  sapply(list(x, y), max)
+```
+</details>
+<br>
+
+
+멀티코어 병렬연산으로 `apply` 를 빠르게 수행할 수도 있는데 본 강의에서는 생략한다. 궁금하신 분은 [과거 정리 내용](https://jinseob2kim.github.io/rbasic.html#apply_%EB%AC%B8_:_apply,_sapply,_lapply) 을 참고하기 바란다. 
+
+
+## 데이터 불러와서 작업하기
+
+이제부터는 실제 데이터를 읽어서 그 데이터를 매니징 하는 방법을 배워보도록 하겠다. 
+
+### 데이터 불러오기, 저장하기
+
+데이터를 불러오기 전에 미리 디렉토리를 지정하면 그 다음부터는 편하게 읽고 쓸 수 있다.
+
+```{r, eval=F}
+getwd()                                                     ## 현재 디렉토리 
+setwd("data")                                               ## 디렉토리 설정
+## 동일
+setwd("/cloud/project/data")
+getwd()
+```
+
+
+폴더 구분을  **/** 로 해야 한다는 점을 명심하자 (`\\` 도 가능). **R** 은 유닉스 기반이기 때문이다. 이제 실습 데이터를 읽어볼텐데, 가급적이면 데이터 포맷은 `csv`로 만드는 것을 추천한다. 콤마로 분리된 가장 간단한 형태로, 용량도 작고 어떤 소프트웨어 에서도 읽을 수 있기 때문이다. 물론 Excel, SPSS, SAS 파일도 읽을 수 있는데, 변수명이나 값에 한글이 있으면 encoding 에러가 생길 수 있으므로 미리 처리하자. 
+
+
+```{r, eval=F}
+ex <- read.csv("example_g1e.csv")
+head(ex)
+```
+
+URL 링크를 이용할 수도 있다.
+
+```{r, eval = F}
+ex <- read.csv("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
+```
+
+```{r, echo=F,  eval=T}
+ex <- read.csv("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
+paged_table(head(ex), options = list(rownames.print = F))
+```
+
+Excel 파일은 **[readxl](https://readxl.tidyverse.org/)**, SAS나 SPSS는 **[haven](https://haven.tidyverse.org/)** 패키지를 이용한다.
+
+```{r, eval=F}
+#install.packages(c("readxl", "haven"))                    ## install packages    
+library(readxl)                                            ## for xlsx
+ex.excel <- read_excel("example_g1e.xlsx", sheet = 1)      ## 1st sheet
+library(haven)                                             ## for SAS/SPSS/STATA   
+ex.sas <- read_sas("example_g1e.sas7bdat")                 ## SAS
+ex.spss <- read_sav("example_g1e.sav")                     ## SPSS
+head(ex.spss)
+```
+
+아래와 같이 Excel, SAS, SPSS 데이터는 `read.csv` 와 형태가 좀 달라보인다. 이것은 최근 **R**에서 인기있는 **[tidyverse](https://www.tidyverse.org/)** 스타일의 데이터인데, 자세한 내용은 다음 강의에서 다룰 예정이니 일단 넘어가자.
+
+```{r, echo=F, eval=T}
+ex.spss <- haven::read_sav("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.sav")
+paged_table(head(ex.spss))
+```
+
+
+
+파일 저장은 `write.csv` 를 이용하며, 맨 왼쪽에 나타나는 행 넘버링을 빼려면 `row.names = F` 옵션을 추가한다. 
+
+```{r, eval=F}
+write.csv(ex, "example_g1e_ex.csv", row.names = F)
+```
+
+**[haven](https://haven.tidyverse.org/)** 패키지에서 `write_sas` 나 `write_sav` 도 가능하다. 
+
+```{r, eval=F}
+write_sas(ex.sas, "example_g1e_ex.sas7bdat")
+write_sav(ex.spss, "example_g1e_ex.sav")
+```
+
+## 읽은 데이터 살펴보기 
+
+본격적으로 데이터를 살펴보자. 데이터는 09-15년 공단 건강검진 데이터에서 실습용으로 `r length(unique(ex))` 명을 뽑은 자료이며, 자세한 내용은 **["data/2교시 테이블 세부 레이아웃 소개(최신자료).pdf"](https://github.com/jinseob2kim/lecture-snuhlab/raw/master/data/2%EA%B5%90%EC%8B%9C%20%ED%85%8C%EC%9D%B4%EB%B8%94%20%EC%84%B8%EB%B6%80%20%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%20%EC%86%8C%EA%B0%9C(%EC%B5%9C%EC%8B%A0%EC%9E%90%EB%A3%8C).pdf)** 를 참고하자.
+
+
+### 데이터 살펴보기
+
+`head` 로 처음 6줄, `tail` 로 마지막 6줄을 볼 수 있다. 데이터 간단히 확인하려고 쓰인다.
+
+```{r, eval=F}
+head(ex)                                                   ## 처음 6행
+tail(ex)                                                   ## 마지막 6행
+head(ex, 10)                                               ## 처음 10행
+```
+
+```{r, echo=F, eval = T}
+head(ex, 10) %>% paged_table(options = list(rownames.print = F))
+```
+
+`str` 은 `head` 와는 다른 방식으로 데이터를 확인한다. **int** 는 정수, **num** 은 실수형을 의미한다.
+
+```{r}
+str(ex)
+```
+
+
+`names` 로 변수들 이름을 확인할 수 있다. **공백이나 특수문자는 "."** 로 바뀌고, 이름이 같은 변수들은 뒤에 숫자가 추가되어 구별된다. `read.csv(..., check.names = F)` 옵션으로 원래 이름을 유지할 수 있으나 에러의 원인이 되므로 추천하지 않는다.
+
+```{r}
+names(ex)
+```
+샘플수, 변수 갯수는 `dim`, `nrow`, `ncol` 로 확인한다.
+
+```{r}
+dim(ex)                                                    ## row, column
+nrow(ex)                                                   ## row
+ncol(ex)                                                   ## column
+```
+
+클래스는 `class`로 확인한다. `read.csv` 는 **data.frame**, Excel/SAS/SPSS 는 **tibble & `data.frame** 인데, **data.frame** 은 **행렬**이면서 데이터에 특화된 **list**, **tibble** 은 앞서 언급했던 **[tidyverse](https://www.tidyverse.org/)** 스타일의 **data.frame** 인 정도만 알고 넘어가자.
+
+```{r}
+class(ex)
+class(ex.spss)
+```
+
+`summary` 로 모든 변수들의 평균, 중위수, 결측치 등을 한 번에 확인할 수 있다. *R*은 결측치를 `NA` 로 표시하며, 안타깝지만 분산은 나오지 않는다.
+
+```{r}
+summary(ex)
+```
+
+### 특정 변수 보기
+
+**data.frame** 에서 특정변수는 **`$`** 를 이용, **데이터이름$변수이름** 로 확인할 수 있다. 앞서 언급했듯이 **data.frame** 은 행렬과 list의 성질도 갖고 있어 해당 스타일로도 가능하다.
+
+```{r, eval=F}       
+ex$EXMD_BZ_YYYY                                            ## data.frame style
+ex[, "EXMD_BZ_YYYY"]                                       ## matrix style
+ex[["EXMD_BZ_YYYY"]]                                       ## list style
+ex[, 1]                                                    ## matrix style with order
+ex[[1]]                                                    ## list style with order
+```
+
+2개 이상 변수선택은 행렬 스타일을 이용한다.
+
+```{r, echo=T, eval=F}
+ex[, c("EXMD_BZ_YYYY", "RN_INDI", "BMI")]                  ## matrix syle with names
+ex[, c(1, 2, 16)]                                          ## matrix syle with names
+ex[, names(ex)[c(1, 2, 16)]]                               ## same
+```
+
+```{r, echo=F}
+paged_table(ex[, c("EXMD_BZ_YYYY", "RN_INDI", "BMI")], options = list(rownames.print = F, rows.print = 6))
+```
+
+특정 변수는 벡터형태로 나타나므로 처음에 다루었던 벡터다루기를 그대로 활용할 수 있다. 예를 들어 년도 변수인 `EXMD_BZ_YYYY`의 첫 50개만 확인하면 아래와 같다.
+
+```{r, eval=F}
+ex$EXMD_BZ_YYYY[1:50]                                      ## data.frame style
+ex[1:50, 1]                                                ## matrix style
+ex[[1]][1:50]                                              ## list style
+```
+
+```{r, echo=F}
+ex$EXMD_BZ_YYYY[1:50]
+```
+
+`unique` 로 변수가 어떤 값들로 이루어져 있는지, `table` 로 해당 값들이 몇개씩 있는지 확인한다.
+
+```{r}
+unique(ex$EXMD_BZ_YYYY)                                   ## unique value
+length(unique(ex$EXMD_BZ_YYYY))                           ## number of unique value
+table(ex$EXMD_BZ_YYYY)                                    ## table
+```
+
+### 새로운 변수 만들기
+
+연속형 변수인 **BMI** 에서 원하는 조건에 맞는 정보를 뽑아내는 연습을 해 보자.
+
+```{r}
+mean(ex$BMI)                                              ## mean
+BMI_cat <- (ex$BMI >= 25)                                 ## TRUE of FALSE
+table(BMI_cat)                         
+rows <- which(ex$BMI >= 25)                               ## row numbers
+head(rows)                                      
+values <- ex$BMI[ex$BMI >= 25]                            ## values
+head(values)
+length(values)
+BMI_HGHT_and <- (ex$BMI >= 25 & ex$HGHT >= 175)              ## and
+BMI_HGHT_or <- (ex$BMI >= 25 | ex$HGHT >= 175)               ## or
+```
+
+데이터에 새로운 변수로 추가하는 방법은 간단하다.
+
+```{r}
+ex$zero <- 0                                              ## variable with 0
+ex$BMI_cat <- (ex$BMI >= 25)                              ## T/F
+ex$BMI_cat <- as.integer(ex$BMI >= 25)                    ## 0, 1
+ex$BMI_cat <- as.character(ex$BMI >= 25)                  ## "0", "1"
+ex$BMI_cat <- ifelse(ex$BMI >= 25, "1", "0")              ## same
+table(ex$BMI_cat)
+ex[, "BMI_cat"] <- (ex$BMI >= 25)                         ## matrix style
+ex[["BMI_cat"]] <- (ex$BMI >= 25)                         ## list style
+```
+
+### 변수 클래스 설정: 데이터 읽은 후 가장 먼저 해야할 것.
+
+앞서 데이터의 클래스가 **data.frame** 임을 언급했었는데, 각 변수들도 자신의 클래스를 갖으며 대표적인 것이 **숫자형(numeric), 문자형(character), 팩터(factor)** 이다. 그 외 T/F 로 나타내는 **논리(logical)**, 날짜를 나타내는 **Date** 클래스가 있다. 숫자는 integer(정수), numeric(실수) 이 있는데, 전부 실수형(numeric)으로 해도 상관없어 설명은 생략한다. 범주형은 **character** 와 **factor** 두 종류가 있는데, 전자는 단순 문자인 반면 후자는 레벨(level) 이 있어 reference 나 순서를 설정할 수 있다. `read.csv` 로 읽으면 숫자는 int/num, **문자는 전부 factor** 가 기본값이므로, 숫자 변수 중 0/1 같은 것들은 직접 **factor** 로 바꿔줘야 한다. ID와 설문조사 변수를 범주형으로 바꿔보자. 
+
+```{r}
+vars.cat <- c("RN_INDI", "Q_PHX_DX_STK", "Q_PHX_DX_HTDZ", "Q_PHX_DX_HTN", "Q_PHX_DX_DM", "Q_PHX_DX_DLD", "Q_PHX_DX_PTB", 
+              "Q_HBV_AG", "Q_SMK_YN", "Q_DRK_FRQ_V09N")
+vars.cat <- names(ex)[c(2, 4:12)]                              ## same
+vars.cat <- c("RN_INDI", grep("Q_", names(ex), value = T))     ## same: extract variables starting with "Q_"
+vars.conti <- setdiff(names(ex), vars.cat)                     ## Exclude categorical variables
+vars.conti <- names(ex)[!(names(ex) %in% vars.cat)]            ## same: !- not, %in%- including
+for (vn in vars.cat){                                          ## for loop: as.factor
+  ex[, vn] <- as.factor(ex[, vn])
+}
+for (vn in vars.conti){                                        ## for loop: as.numeric
+  ex[, vn] <- as.numeric(ex[, vn])
+}
+summary(ex)
+```
+
+`summary` 를 보면 설문조사 변수들이 처음과 달리 빈도로 요약됨을 알 수 있다. 한 가지 주의할 점은 **factor 를 numeric 으로 바로 바꾸면 안된다는 것이다**. 방금 factor 로 바꾼 **Q_PHX_DX_STK** 를 numeric 으로 바꿔서 테이블로 요약하면, 원래의 0/1 이 아닌 1/2로 바뀐다. 
+
+```{r}
+table(
+  as.numeric(ex$Q_PHX_DX_STK)
+  )
+```
+
+factor를 바로 바꾸면 원래 값이 아닌, factor에 내장된 레벨(순서값) 로 바뀌기 때문이다. 제대로 바꾸려면 아래처럼 **character** 로 먼저 바꿔준 후 숫자형을 적용해야 한다.
+
+```{r}
+table(
+  as.numeric(as.character(ex$Q_PHX_DX_STK))
+  )
+```
+
+마지막으로 **Date** 클래스를 살펴보자. 검진년월 변수인 **HME_YYYYMM** 를 Date 로 바꿔 볼텐데,  Date는 년/월/일 이 모두 필요하므로 일은 1로 통일하고 `paste` 로 붙이겠다.
+
+```{r}
+addDate <- paste(ex$HME_YYYYMM, "01", sep = "")                ## add day- use `paste`
+ex$HME_YYYYMM <- as.Date(addDate, format = "%Y%m%d")           ## set format                  
+head(ex$HME_YYYYMM)
+class(ex$HME_YYYYMM)
+```
+
+
+
+### 결측치 다루기
+
+변수 클래스만큼 중요한 것이 결측치 처리이다. 앞서 "함수만들기" 에서 봤듯이 결측치가 있으면 평균같은 기본적인 계산도 `na.rm = T` 옵션이 필요하다. 결측치가 있는 **LDL** 변수의 평균을 **연도별**로 구해보자. 그룹별 통계는 `tapply` 를 이용한다.
+
+```{r, eval = F}
+tapply(ex$LDL, ex$EXMD_BZ_YYYY, mean)                          ## measure/group/function
+```
+
+
+```{r, echo=F}
+kable(
+  t(tapply(ex$LDL, ex$EXMD_BZ_YYYY, mean))                     ## measure/group/function
+)
+```
+
+2009년만 결측치가 없고, 나머지는 결측치가 있어 평균값이 NA 로 나온다.`na.rm = T` 옵션으로 결측치를 제외하면 원하는 결과를 얻는다.
+
+```{r}
+tapply(ex$LDL, ex$EXMD_BZ_YYYY, 
+       function(x){
+         mean(x, na.rm = T)
+         })    
+```
+
+
+더 큰 문제는, 대부분의 **R** 통계분석이 결측치를 갖는 샘플을 분석에서 제외한다는 점이다. 그래서 결측치를 신경쓰지 않고 분석하다보면, 원래 샘플 수와 분석에 이용된 샘플 수가 달라지는 문제가 생길 수 있다. **LDL**과 **HDL** 의 회귀분석 결과를 예로 살펴보자. 
+
+```{r}
+summary(lm(LDL ~ HDL, data = ex))
+```
+
+**"16 observations deleted due to missingness"** 라는 글자가 보일 것이다. **LDL** 이 결측인 16명은 분석에서 제외했다는 뜻이다.
+
+
+#### 연습문제 2: 결측치 처리
+
+결측치를 처리하는 제일 간단한 방법은 **"하나라도 결측치 있는 샘플은 제외"** 로, `na.omit` 함수를 이용하면 된다. 
+
+```{r}
+ex.naomit <- na.omit(ex)
+nrow(ex.naomit)
+```
+
+`r nrow(ex)` 명에서 `r nrow(ex.naomit)` 명으로 샘플 수가 줄어든 것을 확인할 수 있다. 필자는 보통 결측치 처리에 다음의 3가지 원칙을 적용한다.
+
+
+1. 결측치 너무 많으면(예: 10% 이상) 그 변수는 **삭제**
+
+2. 연속변수는 **중간값(median)** 
+
+3. 범주형변수는 **최빈값(mode)**
+
+
+
+이제 문제이다. 아까 변수형을 정리한 **ex** 데이터에 위 3가지 원칙을 적용, 새로운 데이터 **ex.impute** 을 만들어 보아라. 단 최빈값 함수는 아래와 같이 `getmode` 로 주어진다.
+
+```{r}
+getmode <- function(v){
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+getmode(ex$Q_PHX_DX_STK)
+```
+
+
+<details>
+<summary>정답 보기</summary>
+```{r}
+vars.ok <- sapply(names(ex), function(v){sum(is.na(ex[, v])) < nrow(ex)/10})
+ex.impute <- ex[, vars.ok]                                     ## only missing < 10%
+for (v in names(ex.impute)){
+  if (is.factor(ex.impute[, v])){                              ## or class(ex[, v]) == "factor"
+    ex.impute[, v] <- ifelse(is.na(ex.impute[, v]), 
+                             getmode(ex.impute[, v]), 
+                             ex.impute[, v])
+  } else if (is.numeric(ex[, v])){                             ## or class(ex[, v]) %in% c("integer", "numeric")
+    ex.impute[, v] <- ifelse(is.na(ex.impute[, v]), 
+                             median(ex.impute[, v], na.rm = T), 
+                             ex.impute[, v])
+  } else{                                                      ## when date
+    ex.impute[, v]
+  }
+}
+summary(ex.impute)
+```
+</details>
+<br>
+
+### Subset
+
+특정 조건을 만족하는 서브데이터는 지금까지 배웠던 것을 응용해 만들 수도 있지만, `subset` 함수가 편하다. 아래는 2012 이후의 자료만 뽑는 예시이다. 이제부터는 결측치를 전부 제외한 **ex.naomit** 데이터를 이용하겠다.
+
+```{r}
+ex1 <- ex.naomit                                               ## simple name
+ex1.2012 <- ex1[ex1$EXMD_BZ_YYYY >= 2012, ]
+table(ex1.2012$EXMD_BZ_YYYY)
+ex1.2012 <- subset(ex1, EXMD_BZ_YYYY >= 2012)                  ## subset
+table(ex1.2012$EXMD_BZ_YYYY)
+```
+
+
+### 그룹별 통계
+
+결측치 다루기에서 그룹별 통계를 구할 때 `tapply` 를 이용했었다. `tapply` 를 여러 변수, 여러 그룹을 동시에 고려도록 확장할 수 있는 함수가 `aggregate` 로, 허리둘레와 BMI의 평균을 고혈압 또는 당뇨 여부에 따라 살펴보자.
+
+```{r, eval=F}
+aggregate(ex1[, c("WSTC", "BMI")], list(ex1$Q_PHX_DX_HTN), mean)
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN, data = ex1, mean)   ## same
+```
+
+```{r, echo=F}
+aggregate(ex1[, c("WSTC", "BMI")], list(ex1$Q_PHX_DX_HTN), mean) %>% kable()
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN, data = ex1, mean) %>% kable()
+```
+
+결측치가 있어도 잘 적용된다는 장점이 있다.
+
+```{r, eval=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN, data = ex, mean)
+```
+
+```{r, echo=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN, data = ex, mean) %>% kable()
+```
+
+
+당뇨여부도 그룹으로 다루려면 **list** 에 추가하면 된다.
+
+```{r, eval=F}
+aggregate(ex1[, c("WSTC", "BMI")], list(ex1$Q_PHX_DX_HTN, ex1$Q_PHX_DX_DM), mean)
+```
+
+```{r, echo=F}
+aggregate(ex1[, c("WSTC", "BMI")], list(ex1$Q_PHX_DX_HTN, ex1$Q_PHX_DX_DM), mean) %>% kable()
+```
+
+
+**Group.1** 이 첫번째 그룹은 고혈압 여부, **Group.2** 가 두번째 그룹인 당뇨 여부이다. 위와 마찬가지로 formula 형태를 이용할 수도 있다.
+
+```{r, eval=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN + Q_PHX_DX_DM, data = ex1, mean)
+```
+
+```{r, echo=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN + Q_PHX_DX_DM, data = ex1, mean) %>% kable()
+```
+
+
+표준편차를 같이 보려면 `function(x){c(mean = mean(x), sd = sd(x))}` 와 같이 원하는 함수들을 벡터로 모으면 된다.
+
+```{r, eval=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN + Q_PHX_DX_DM, data = ex1, function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+```{r, echo=F}
+aggregate(cbind(WSTC, BMI) ~ Q_PHX_DX_HTN + Q_PHX_DX_DM, data = ex1, function(x){c(mean = mean(x), sd = sd(x))}) %>% kable()
+```
+
+아예 데이터의 모든 변수의 평균을 다 볼순 없을까? 아래처럼 **"."** 으로 전체 데이터를 지정할 수 있다. 
+
+```{r}
+aggregate(. ~ Q_PHX_DX_HTN  + Q_PHX_DX_DM, data = ex1, function(x){c(mean = mean(x), sd = sd(x))})    
+```
+
+
+
+### Sort
+
+정렬은 순위함수인 `order` 를 이용한다. 기본은 오름차순이며, 내림차순을 원한다면 **(-) 붙인 값의 순위**를 구하면 된다.
+
+```{r}
+ord <- order(ex1$HGHT)                                        ## 작은 순서대로 순위
+head(ord)
+head(ex1$HGHT[ord])                                           ## Sort
+ord.desc <- order(-ex1$HGHT)                                  ## descending
+head(ex1$HGHT[ord.desc])
+```
+
+```{r, eval=F}
+ex1.sort <- ex1[ord, ]
+head(ex1.sort)
+```
+
+```{r, echo=F}
+ex1.sort <- ex1[ord, ]
+ex1.sort %>% paged_table(options = list(rownames.print = F))
+```
+
+
+### Wide to long, long to wide format
+
+받은 데이터가 원하는 형태가 아닌 경우가 있다. 수축기 혈압을 10번 측정해서 각각 SBP1, SBP2, ..., SBP10 변수에 기록된 데이터를 본다면, 이것들을 쫙 아래로 내려 측정시기, 측정값 2개의 변수로 정리하고 싶다는 마음이 들 것이다. 이럴 때 쓰는 함수가 `melt`, 반대로 데이터를 옆으로 늘릴 때 쓰는 함수가 `dcast` 이다(Figure \@ref(fig:melt)^[https://t1.daumcdn.net/cfile/tistory/2433F13D55E1163907]). 
+
+```{r melt, fig.align="center", echo=F, fig.cap="melt and dcast"}
+knitr::include_graphics("https://t1.daumcdn.net/cfile/tistory/2433F13D55E1163907")
+```
+
+실습으로 수축기/이완기 혈압 변수를 합쳐서 아래로 내려보자.
+
+```{r, eval = F}
+library(reshape2)
+long <- melt(ex1, id = c("EXMD_BZ_YYYY", "RN_INDI"), measure.vars = c("BP_SYS", "BP_DIA"), variable.name = "BP_type", value.name = "BP")
+long
+```
+
+```{r, echo = F}
+library(reshape2)
+long <- melt(ex1, id = c("EXMD_BZ_YYYY", "RN_INDI"), measure.vars = c("BP_SYS", "BP_DIA"), variable.name = "BP_type", value.name = "BP")
+long %>% paged_table(options = list(rownames.print = F))
+```
+
+**id** 는 유지할 변수, **measure.vars** 는 내릴 변수를 의미하고, **variable.name, value.name** 은 각각 그룹, 값의 변수이름을 의미한다. 이를 원래대로 되돌리려면 `dcast` 를 이용하는데, **"유지할 변수 ~ 펼칠 변수"** 형태로 formula 를 입력한다.
+
+```{r, eval=F}
+wide <- dcast(long, EXMD_BZ_YYYY + RN_INDI ~ BP_type, value.var = "BP")
+head(wide)
+```
+
+```{r, echo=F}
+wide <- dcast(long, EXMD_BZ_YYYY + RN_INDI ~ BP_type, value.var = "BP")
+head(wide) %>% paged_table(options = list(rownames.print = F))
+```
+
+### Merge
+
+`merge` 함수를 이용한다. **"by"** 옵션으로 기준이 되는 공통 컬럼을 설정하며, 기준 컬럼의 이름이 두 데이터 셋에서 다른 경우는 **"by.x"** 와 **"by.y"** 로 따로 설정한다. 실습을 위해 **ex1** 데이터를 2개로 나눈 후 `merge` 를 적용하겠다.  
+
+```{r, eval = F}
+ex1.Q <- ex1[, c(1:3, 4:12)]
+ex1.measure <- ex1[, c(1:3, 13:ncol(ex1))]
+head(ex1.Q)
+head(ex1.measure)
+```
+
+```{r, echo = F}
+ex1.Q <- ex1[, c(1:3, 4:12)]
+ex1.measure <- ex1[, c(1:3, 13:ncol(ex1))]
+head(ex1.Q) %>% paged_table(options = list(rownames.print = F))
+head(ex1.measure) %>% paged_table(options = list(rownames.print = F))
+```
+
+전자는 설문조사 결과를, 후자는 측정값을 포함했고 **"년도, ID, 검진년월"** 은 공통변수이다. 이 공통변수로 `merge` 를 적용하면 
+
+```{r, eval=F}
+ex1.merge <- merge(ex1.Q, ex1.measure, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all = T)
+head(ex1.merge)
+```
+
+```{r, echo=F}
+ex1.merge <- merge(ex1.Q, ex1.measure, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all = T)
+head(ex1.merge) %>% paged_table(options = list(rownames.print = F))
+```
+
+합쳐진 원래 데이터를 얻을 수 있다. `all = T` 는 한 쪽에만 있는 샘플을 유지하는 옵션이며 빈 변수는 `NA` 로 채워진다. 공통인 샘플만 취하려면 `all = F` 로 바꾸자.
+
+
+## 마치며 
+
+이번 강의를 정리하자. 
+
+1. [RStudio cloud](https://rstudio.cloud/) 로 클라우드 환경에서 실습을 진행했으며
+
+2. 기초 벡터연산과 `for`, `if`, `ifelse`, `함수만들기`, `apply` 문을 통해 기본 문법을 익혔고 
+
+3. 공단 검진 데이터를 실습자료를 읽어와 데이터를 살펴보는 법을 배웠다. 
+
+    + 변수 생성, 클래스 설정, 결측치 처리, 서브데이터, 그룹별 통계, 정렬
+
+4. 마지막으로 Long/wide type 데이터 변환과 `merge` 를 다루었다.
+
+
+기타 기본적으로 알아야 할 **R** 명령어는 아래의 [Base R Cheat Sheet](https://rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf) 에서 확인할 수 있다. 
+
+<embed src="https://drive.google.com/viewerng/
+viewer?embedded=true&url=https://rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf" width="100%" height="600">
+
+<br>
+다음 강의에서는 쉬운 문법으로 **R** 의 대세가 된 **[tidyverse](https://www.tidyverse.org/)** 를 다룰 예정인데, 오늘 배운 기본 문법과 많은 비교가 될 것이다. 미리 알아보고 싶은 분은 **[본 블로그의 이전 글](https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/)^[https://blog.zarathu.com/posts/2019-01-03-rdatamanagement]** 을 참고하기 바란다.
