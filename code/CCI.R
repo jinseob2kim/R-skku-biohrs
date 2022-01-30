@@ -3,8 +3,8 @@ library(haven);library(data.table);library(magrittr);library(parallel)
 # Set core number when data.table
 setDTthreads(0)  ## 0: All
 
-m20 <- read_sas("data/nsc2_m20_1000.sas7bdat") %>% data.table
-m40 <- read_sas("data/nsc2_m40_1000.sas7bdat") %>% data.table
+m20 <- fread("data/nsc2_m20_1000.csv") 
+m40 <- fread("data/nsc2_m40_1000.csv") 
 
 code.cci <- list(
   MI = c("I12", "I22","I252"),                                            

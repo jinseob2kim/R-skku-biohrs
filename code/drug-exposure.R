@@ -2,14 +2,8 @@ library(haven);library(data.table);library(magrittr)
 # Set core number when data.table
 setDTthreads(0)  ## 0: All
 
-#bnc <- read_sas("data/nsc2_bnc_1000.sas7bdat") %>% data.table
-#bnd <- read_sas("data/nsc2_bnd_1000.sas7bdat") %>% data.table
-m20 <- read_sas("data/nsc2_m20_1000.sas7bdat") %>% data.table
-#m30 <- read_sas("data/nsc2_m30_1000.sas7bdat") %>% data.table
-#m40 <- read_sas("data/nsc2_m40_1000.sas7bdat") %>% data.table
-m60 <- read_sas("data/nsc2_m60_1000.sas7bdat") %>% data.table
-#ex0915 <- read_sas("data/nsc2_p30_0915_1000.sas7bdat") %>% data.table
-
+m20 <- fread("data/nsc2_m20_1000.csv") 
+m40 <- fread("data/nsc2_m40_1000.csv") 
 
 
 ## Drug code
