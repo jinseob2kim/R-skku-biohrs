@@ -50,4 +50,4 @@ dur_conti <- function(indi, duration = 180, gap = 30){
 }
 
 ## Result: Use multicore
-parallel::mclapply(unique(m60.drug$RN_INDI), dur_conti, duration = 180) %>% rbindlist() %>% .[!is.na(RN_INDI)]
+parallel::mclapply(unique(m60.drug$RN_INDI), dur_conti, duration = 180, mc.cores = 4) %>% rbindlist() %>% .[!is.na(RN_INDI)]
