@@ -3,8 +3,8 @@ library(haven);library(data.table);library(magrittr);library(parallel)
 # Set core number when data.table
 setDTthreads(0)  ## 0: All
 
-m20 <- fread("data/nsc2_m20_1000.csv") 
-m40 <- fread("data/nsc2_m40_1000.csv") 
+data.include <- m20[MDCARE_STRT_DT >= 20060101][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, MDCARE_STRT_DT)]
+
 
 code.cci <- list(
   MI = c("I21", "I22", "I252"),
@@ -30,7 +30,6 @@ cciscore <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 6, 6, 2)
 names(cciscore) <- names(code.cci)
 
 
-data.include <- m20[, .(RN_INDI, MDCARE_STRT_DT)]
 
 info.cci <- mclapply(names(code.cci), function(x){
   merge(data.include[, .(RN_INDI, MDCARE_STRT_DT)], 

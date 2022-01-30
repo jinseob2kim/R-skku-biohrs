@@ -2,10 +2,6 @@ library(haven);library(data.table);library(magrittr)
 # Set core number when data.table
 setDTthreads(0)  ## 0: All
 
-m20 <- fread("data/nsc2_m20_1000.csv") 
-m40 <- fread("data/nsc2_m40_1000.csv") 
-
-
 ## Drug code
 code.ppi <-  c("367201ACH", "367201ATB", "367201ATD", "367202ACH", "367202ATB", 
                "367202ATD", "498001ACH", "498002ACH", "509901ACH", "509902ACH", 
