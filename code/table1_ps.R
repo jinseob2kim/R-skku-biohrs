@@ -23,5 +23,5 @@ data.design <- survey::svydesign(ids = ~1, weights = ~w, data = data.final)
 CreateTableOne(vars.tb1, strata = "SEX", data = data.mat) %>% 
   print(showAllLevels = T, nonnormal = c("Day_FU", "MIday"), exact = "MI", smd = T)
 
-svyCreateTableOneJS(vars.tb1, strata = "SEX", data = data.design) %>% 
+svyCreateTableOne(vars.tb1, strata = "SEX", data = data.design) %>% 
   print(showAllLevels = T, nonnormal = c("Day_FU", "MIday"), exact = "MI", smd = T) 
