@@ -1,10 +1,8 @@
 ## Calculate CCI: based previous records
-library(haven);library(data.table);library(magrittr);library(parallel)
-# Set core number when data.table
-setDTthreads(0)  ## 0: All
+library(parallel)
 
-data.include <- m20[MDCARE_STRT_DT >= 20060101][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, MDCARE_STRT_DT)]
-
+source("code/inclusion.R")
+data.asd  ## Inclusion data
 
 code.cci <- list(
   MI = c("I21", "I22", "I252"),
@@ -32,8 +30,9 @@ names(cciscore) <- names(code.cci)
 
 
 info.cci <- mclapply(names(code.cci), function(x){
-  merge(data.include[, .(RN_INDI, MDCARE_STRT_DT)], 
+  merge(data.asd[, .(RN_INDI, Indexdate)], 
         m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
-        by = "RN_INDI", all.x = T)[, ev := as.integer(as.integer(MDCARE_STRT_DT) > as.integer(inidate))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
-}, mc.cores = 4) %>% do.call(cbind, .)
-colnames(info.cci) <- names(code.cci)
+        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
+}, mc.cores = 4) %>% do.call(cbind, .) %>% cbind(rowSums(.))
+colnames(info.cci) <- c(paste0("Prev_", names(code.cci)), "CCI")
+
