@@ -109,7 +109,7 @@ out
 sapply(1:nrow(mat), function(x){mean(mat[x, ])})             ## Return vector
 lapply(1:nrow(mat), function(x){mean(mat[x, ])})             ## Return list type
 unlist(lapply(1:nrow(mat), function(x){mean(mat[x, ])}))     ## Same to sapply
-
+#parallel::mclapply(1:nrow(mat), function(x){mean(mat[x, ])}, mc.cores = 4)           ## Multicore
 
 apply(mat, 1, mean)                                          ## 1: 행
 rowMeans(mat)                                                ## 동일
