@@ -29,7 +29,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |1| 2월 21일  | 강의계획안내, [깃허브(github)](code/github.R), [공공의료빅데이터 소개](lecture/공단데이터소개.pdf)  |
 |2| 2월 28일  | R 데이터 매니지먼트 [base](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic), [code](code/base.R)  |
 |3|  3월 7일|  R 데이터 매니지먼트 최근: [tidyverse](https://jinseob2kim.github.io/lecture-snuhlab/tidyverse) |
-|4|   3월 14일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/)  |
+|4|   3월 14일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/), [code](code/datatable.R)  |
 |5|  3월 21일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
 |6|  3월 28일| R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
 |7|  4월 4일| 중간고사|
