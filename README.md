@@ -13,11 +13,16 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 
 이름: [김진섭](https://jinseob2kim.github.io/resume/)
 
-소속: 연구지원 법인 [차라투](https://www.zarathu.com) 대표
+소속: 연구지원법인 [차라투](https://www.zarathu.com) 대표
 
 학력: 성균관의대 졸업, [서울대학교 보건대학원](http://snugepi.snu.ac.kr/) 박사 수료.
       
-주요 경력: 예방의학 전문의(서울대 보건대학원), 책임연구원(삼성전자 무선사업부)
+주요 경력: 
+
+ - [예방의학 전문의(서울대 보건대학원)](http://snu-prev.com/), 
+ - [책임연구원(삼성전자 무선사업부)](https://news.samsung.com/kr/%EC%97%85%EB%AC%B4%EA%B0%80-%EC%9E%A0%EC%9E%90%EA%B8%B0%EC%97%AC%EC%84%9C-%EC%A2%8B%EA%B2%A0%EB%8B%A4%EA%B3%A0%EC%9A%94-s%ED%97%AC%EC%8A%A4-%EA%B0%9C%EB%B0%9C%EC%A7%84), 
+ - R패키지 개발([jskm](https://CRAN.R-project.org/package=jskm), [jstable](https://CRAN.R-project.org/package=jstable), [jsmodule](https://CRAN.R-project.org/package=jsmodule)),  
+ - R 개발자 커뮤니티 [Shinykorea](https://github.com/Shinykorea) 후원 및 운영
 
 
 ## 일정 
