@@ -44,5 +44,4 @@ usethis::git_sitrep()
 ## 'Personal access token: '<found in env var>''
 
 # ----------------------------------------------------------------------------
-
 ## THAT'S IT!
