@@ -24,6 +24,8 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
  - R패키지 개발([jskm](https://CRAN.R-project.org/package=jskm), [jstable](https://CRAN.R-project.org/package=jstable), [jsmodule](https://CRAN.R-project.org/package=jsmodule)),  
  - R 개발자 커뮤니티 [Shinykorea](https://github.com/Shinykorea) 후원 및 운영
 
+온라인 조교: [김유민](https://github.com/yumin9-kim), [email](yumin.kim@zarathu.com)
+
 
 ## 일정 
 
