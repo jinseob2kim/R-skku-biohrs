@@ -17,6 +17,11 @@
 
 ### 3. Configure git with Rstudio ############################################
 
+## setting: permanent storage
+credentials::credential_helper_set("manager")                 # Windows
+credentials::credential_helper_set("osxkeychain")             # Mac
+credentials::credential_helper_set("store")                   # Linux
+
 ## create a personal access token for authentication:
 usethis::create_github_token() 
 ## in case usethis version < 2.0.0: usethis::browse_github_token() (or even better: update usethis!)
@@ -39,11 +44,5 @@ usethis::git_sitrep()
 ## 'Personal access token: '<found in env var>''
 
 # ----------------------------------------------------------------------------
-
-### 6. Permanent saving
-system("git config --global credential.helper manager")       # Windows
-system("git config --global credential.helper osxkeychain")   # MacOS
-system("git config --global credential.helper store")         # Linux
-
 
 ## THAT'S IT!
