@@ -41,6 +41,9 @@ usethis::git_sitrep()
 # ----------------------------------------------------------------------------
 
 ### 6. Permanent saving
+system("git config --global credential.helper manager")       # Windows
+system("git config --global credential.helper osxkeychain")   # MacOS
+system("git config --global credential.helper store")         # Linux
 
 
 ## THAT'S IT!

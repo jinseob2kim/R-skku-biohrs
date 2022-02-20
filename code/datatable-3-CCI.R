@@ -1,7 +1,7 @@
 ## Calculate CCI: based previous records
 library(parallel)
 
-source("code/inclusion.R")
+source("code/datatable-2-inclusion.R")
 data.asd  ## Inclusion data
 
 code.cci <- list(
