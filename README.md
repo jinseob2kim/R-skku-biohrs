@@ -40,7 +40,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |5|  3월 21일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
 |6|  3월 28일| R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
 |7|  4월 4일| 중간고사|
-|8|  4월 7일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/),[tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummar8/) |
+|8|  4월 7일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/),[tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummary/) |
 |9|  4월 18일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/) 
 |10|  4월 25일| R 통계(3): [일반화 부가모형(Generalized Additive Model)](https://www.slideshare.net/secondmath/generalized-additive-model) |
 |11|  5월 2일| R 통계(4): [성향점수 매칭, 가중치](code/table1_ps.R), 국건영데이터 소개 |
