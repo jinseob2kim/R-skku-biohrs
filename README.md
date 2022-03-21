@@ -63,7 +63,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 
 
 
-**[실습데이터 및 설명자료 다운로드](https://1drv.ms/u/s!AvwFxLQIpBXdhf0B_wedH9jP7D6sHg?e=6FBDRA)**: 비번 1234
+**[실습데이터 및 설명자료 다운로드](https://1drv.ms/u/s!AvwFxLQIpBXdhf0B_wedH9jP7D6sHg)**
 
 [심평원 약품성분명코드](https://www.data.go.kr/data/15067461/fileData.do)
 
