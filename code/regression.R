@@ -28,3 +28,20 @@ glm(status ~ age + rx, data = subset(colon, sex == 1), family = binomial)
 glm(status ~ age + rx, data = subset(colon, sex == 0), family = binomial)
 
 glm(status ~ sex*age + rx, data = colon, family = binomial)
+
+
+
+### Cox
+km <- survfit(Surv(time, status) ~ sex, data = colon)
+library(jskm)
+
+jskm(km, pval = T, marks = F, table = T, surv.scale = "percent", cumhaz = T, ylab = "Cumulative incidence")
+
+km %>% summary
+
+cox.zph(cmodel)
+
+
+cmodel <- coxph(Surv(time, status) ~ age + sex + rx, data = colon, model = T)
+cmodel
+cox2.display(cmodel)$table
