@@ -44,7 +44,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |9|  4월 18일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/), [리뷰어 위한 의학통계](https://jinseob2kim.github.io/lecture-general/statreview/#59) 
 |10|  4월 25일| R 통계(3): [성향점수 매칭, 가중치](code/table1_ps.R), [국건영데이터 소개](https://knhanes.kdca.go.kr/knhanes/sub03/sub03_01.do), [code](code/KNHANES.R) |
 |11|  5월 2일| R로 보고서쓰기: [Rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/), [엑셀, ppt로 저장하기](lecture/dataexport.pptx) |
-|12|  5월 9일| R로 홈페이지/블로그 만들기: [blogdown](https://pkgs.rstudio.com/blogdown/), [distill](https://rstudio.github.io/distill/) |
+|12|  5월 9일| R로 홈페이지/블로그 만들기: [blogdown](https://pkgs.rstudio.com/blogdown/), [distill](https://rstudio.github.io/distill/), [bookdown](https://bookdown.org/), [xaringan](https://slides.yihui.org/xaringan/#1) |
 |13|  5월 16일| R로 웹앱 만들기: [Shiny 소개](https://github.com/jinseob2kim/shiny-workshop-odsc2019) |
 |14|  5월 23일| [R 패키지 만들기](https://github.com/jinseob2kim/RTHON2020) |
 |15|  5월 30일| 기말고사 |
