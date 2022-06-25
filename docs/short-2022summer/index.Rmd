@@ -146,6 +146,35 @@ class: center, middle
 
 # 분석
 
+
+---
+# Python vs R vs SAS
+
+
+---
+# R 데이터전처리 
+
+base vs tidyverse vs data.table
+
+
+---
+# R plot
+
+base, ggplot2, ggpubr, highcharter
+
+
+---
+
+# 통계 
+
+
+
+
+
+
+
+
+
 ---
 # 프로그램 개발, 블로그 운영
 
