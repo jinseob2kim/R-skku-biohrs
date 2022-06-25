@@ -63,7 +63,16 @@ class: center, middle
 ---
 # [공개 통계웹](https://openstat.ai) 
 
-![](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/app.gif)
+.large[
+- 간단한 통계(table 1, 회귀분석, ROC)는 데이터 직접 업로드 한 후 분석.
+
+- Propensity score analysis, 국건영데이터분석, 메타분석 
+]
+
+<center>
+<img src="https://openstat.ai/static/img/services/GeneralApps/metaAnalysis.png" width=80%></a>
+</center>
+
 
 
 ---
@@ -148,19 +157,126 @@ class: center, middle
 
 
 ---
-# Python vs R vs SAS
+# R vs Python
+
+.large[
+**의료데이터 + 연구**는 R이 좋다.
+
+- 의학분야 최신패키지는 R first
+
+- 강력한 전처리 패키지 존재: [tidyverse](https://blog.zarathu.com/posts/2020-04-06-rdatamanagementtidyverse/), [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/)
+
+- 문서, 슬라이드 제작등 컨텐츠 만드는데 최적화. 
+
+- [Rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/): 글, 테이블, 그림, 참고문헌까지 R로만 논문 작성가능. 
+
+- 공통데이터모델(OMOP-CDM) 분석언어
+]
+
+--
+.large[
+**AI 특화**는 Python 추천
+
+- R로도 다 되긴하나(torch, keras), 구글링 Python 유리
+
+- 신경망 외 일반적인 ML은 R로 충분히 좋다([caret](https://github.com/topepo/caret/) 추천)
+]
+
+---
+# [tidyverse](https://blog.zarathu.com/posts/2020-04-06-rdatamanagementtidyverse/)
+
+.large[
+R 기본문법 대체, 사실상 표준문법. 
+]
+
+<center>
+<a href="https://www.storybench.org/getting-started-with-tidyverse-in-r/"><img src="https://www.storybench.org/wp-content/uploads/2017/05/tidyverse.png" width=100%></a>
+</center>
+
 
 
 ---
-# R 데이터전처리 
+# [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/)
 
-base vs tidyverse vs data.table
+.large[
+가장 빠른 스피드, 빅데이터용 필수패키지
+
+- 심평원/공단분석 필수.
+
+- 파일 가장 빨리 읽고 쓰는 [fst](https://www.fstpackage.org/)와 찰떡궁합
+
+- 멀티코어 지원
+
+]
+
+<center>
+<a href="https://github.com/fastverse/fastverse"><img src="https://pbs.twimg.com/media/E8mHra4VgA0vnY_.jpg" width=100%></a>
+</center>
 
 
 ---
-# R plot
+# [R plot](https://blog.zarathu.com/posts/2022-03-25-graph/)
 
-base, ggplot2, ggpubr, highcharter
+.large[
+[ggplot2](https://ggplot2.tidyverse.org/) > Base: 사실상 표준 
+
+- [ggpubr](https://partrita.github.io/posts/ggpubr/) : 연구용 그림 + p-value 최적화
+
+- [highcharter](https://jkunst.com/highcharter/): 반응형 그림, 상업용은 유료
+
+- [jskm](https://github.com/jinseob2kim/jskm): 자체 개발 kaplan-meier 패키지 
+]
+
+<center>
+<a href="https://github.com/jinseob2kim/jskm"><img src="https://github.com/jinseob2kim/jskm/raw/master/man/figures/README-unnamed-chunk-5-3.png" width=50%></a>
+</center>
+
+---
+# PPT export: [officer](https://davidgohel.github.io/officer/)
+
+.large[
+그림 직접수정위해 반드시 PPT with 벡터그래픽 필요
+]
+
+```{r, eval=F, echo=T}
+library(rvg);library(officer)
+editable_graph <- dml(ggobj = gg_plot)
+doc <- read_pptx()
+doc <- add_slide(doc)
+doc <- ph_with(x = doc, editable_graph,
+   location = ph_location_type(type = "body") )
+print(doc, target = "reports/rvg.pptx")
+```
+
+<center>
+<a href="https://ardata-fr.github.io/officeverse/reports/rvg.pptx"><img src="https://ardata-fr.github.io/officeverse/static/r-img/img-unnamed-chunk-77.png" width=40%></a>
+</center>
+
+
+
+---
+# 공단/심평원분석 전략 
+
+.large[
+공단/심평원은 SAS 파일, 그러나 R로 대부분 가능 
+
+- [haven](https://haven.tidyverse.org) 패키지로 sas7bdat 읽기, but 느림
+
+- csv 또는 fst로 변환하여 R로 빨리 읽기
+
+- SAS는 R서버 RAM보다 큰 데이터 다룰 때만: 크게크게 쳐냄
+
+- 반출 테이블: xlsx 하나에 탭들로 저장, [openxlsx]() 패키지 이용
+
+- 반출 그림: pptx 하나에 여러 슬라이드로 저장. [officer](https://davidgohel.github.io/officer/)
+
+]
+
+
+---
+# [openxlsx]
+
+
 
 
 ---
@@ -206,14 +322,6 @@ base, ggplot2, ggpubr, highcharter
 </center>
 
 
-
-
-
----
-
-class: center, middle
-
-# 서비스
 
 ---
 # [R](https://www.r-project.org/)의 확장
@@ -280,27 +388,12 @@ include_graphics("https://www.storybench.org/wp-content/uploads/2019/05/blogdown
 include_graphics("https://shiny.rstudio.com/images/debugging/kmeans-showcase.gif")
 ```
 
----
-# 웹 대시보드 
-
-[shinydashboard](https://rstudio.github.io/shinydashboard/), [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) 등
-
-<center>
-<a href="https://rmarkdown.rstudio.com/flexdashboard"><img src="https://tadge-analytics.com.au/content/images/2020/01/feature-demonstration.gif" width=70%></a>
-</center>
 
 
 
----
-# 웹 서버
 
-[Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): [Shiny](https://shiny.rstudio.com/)를 서버에서 구동.
 
-```{r}
-include_graphics("https://shiny.rstudio.com/images/shiny-server-pro.png")
-```
 
-[Zarathu app](http://app.zarathu.com)
 
 
 
