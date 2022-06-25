@@ -50,6 +50,9 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |14|  5월 23일| [R 패키지 만들기](https://github.com/jinseob2kim/RTHON2020) |
 |15|  5월 30일| [기말고사](https://jinseob2kim.github.io/finalexam/finalexam.html) |
 
+## 특강
+|1| 22.07.15| [데이터과학자가 갖춰야할 기술: 규제과학과 단기 교육](https://jinseob2kim.github.io/R-skku-biohrs/short-2022summer) |
+
 
 ## 준비사항 
 

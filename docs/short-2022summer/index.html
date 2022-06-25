@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>데이터과학자가 갖춰야할 기술</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="김진섭; <span>&lt;i class="fab  fa-github faa-float animated "&gt;&lt;/i&gt;jinseob2kim</span>" />
+    <meta name="date" content="2022-07-15" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome-animation/font-awesome-animation-emi.css" rel="stylesheet" />
+    <script src="libs/fontawesome/js/fontawesome-all.min.js"></script>
+    <link rel="stylesheet" href="css/footer-header.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# 데이터과학자가 갖춰야할 기술
+]
+.subtitle[
+## 규제과학과 단기 교육 프로그램
+]
+.author[
+### 김진섭; <a href="https://github.com/jinseob2kim"><span>&lt;i class="fab  fa-github faa-float animated "&gt;&lt;/i&gt;jinseob2kim</span></a>
+]
+.institute[
+### 차라투(주)
+]
+.date[
+### 2022-07-15
+]
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;&lt;span&gt;&lt;a href="https://www.zarathu.com"&gt;Zarathu Co.,Ltd&lt;/a&gt;   
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&lt;a href="https://github.com/jinseob2kim"&gt;김진섭&lt;/a&gt;&lt;/span&gt;&lt;/div&gt; 
+
+
+---
+# Executive summary
+
+.large[
+- 분석: 데이터전처리, 분석, Github 코드관리
+
+- 서비스: 리포트, 웹 애플리케이션
+
+- 분석환경관리: 리눅스, 클라우드, Docker
+]
+
+
+
+---
+class: center, middle
+
+
+# 하는일 
+
+
+---
+# 맞춤형 통계웹
+
+![](https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/cdm-intro/ss.png)
+---
+# [공개 통계웹](https://openstat.ai) 
+
+![](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/app.gif)
+
+
+---
+# 주요 계약 
+
+
+- 대한심혈관중재학회 [COBIS III 레지스트리](https://clinicaltrials.gov/ct2/show/NCT03068494) 분석: [추가계약](http://pf.kakao.com/_XsuxgC/48388190)
+
+
+- 서울성모병원 [COREA-AMI II 레지스트리](https://clinicaltrials.gov/ct2/show/NCT02806102) 분석: [10개 연구 계약](http://pf.kakao.com/_XsuxgC/48043955)
+
+
+- 삼성서울병원 [공통데이터모델(CDM)](http://www.feedernet.org/html/?pmode=cdmdrn) 분석: [심평원 코로나데이터](https://hira-covid19.net/) 분석 중 
+
+
+- 강동성심병원 CDM 분석지원: 공단표본데이터 분석 중 
+
+
+- 경기도감염병관리지원단 코로나 대시보드 with Shinykorea: [최종보고](https://shinykorea.github.io/corona-activityrecord) 
+
+
+- 삼성서울병원 이식외과 육종(sarcoma) 데이터 분석: [5개 연구 계약](http://pf.kakao.com/_XsuxgC/51701089) 
+
+
+- 해운대백병원 정신질환 네트워크분석: [논문 5편](http://pf.kakao.com/_XsuxgC/52664370) 게재
+
+
+- 성균관의대 환경역학연구실 [미세먼지 대시보드](http://pf.kakao.com/_XsuxgC/43627405)
+
+
+- [삼성서울병원 정신과 통계자문계약](http://pf.kakao.com/_XsuxgC/55192190)
+
+- [서울대병원 순환기내과 통계자문계약](http://pf.kakao.com/_XsuxgC/55577702)
+
+---
+# 주요 논문 성과 
+
+.large[
+SCI 논문 200건 지원
+]
+&lt;center&gt;
+&lt;img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/paper.jpg" width=80%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+
+---
+# 정부지원사업 선정
+
+&lt;center&gt;
+&lt;img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/gv.jpg" width=100%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+---
+# 22년 IITP 연구개발과제 선정 
+
+.large[
+2년 10.5억 with 앤틀러, 파이디지털헬스케어
+]
+&lt;center&gt;
+&lt;img src="http://k.kakaocdn.net/dn/bsgueW/btrzkqLQ3H2/qQBLFHw769HWkRJyeRWRG1/img_l.jpg" width=70%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+
+
+
+---
+
+class: center, middle
+
+# 분석
+
+---
+# 프로그램 개발, 블로그 운영
+
+.large[
+[R](https://www.r-project.org/) packages
+
+- [jstable](https://github.com/jinseob2kim/jstable): 논문용 테이블 만들기
+
+
+- [jskm](https://github.com/jinseob2kim/jskm): 생존분석 그림 만들기
+
+
+- [jsmodule](https://github.com/jinseob2kim/jsmodule): 웹에서 하는 통계분석
+]
+
+
+---
+# 80,000 다운로드
+
+&lt;center&gt;
+&lt;img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/korea-preventive/cran.png" width=80%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+---
+# 발표: R패키지 개발 후기
+&lt;center&gt;
+&lt;img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/RUCK2019.jpg" width=80%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+
+
+
+---
+
+class: center, middle
+
+# 서비스
+
+---
+# [R](https://www.r-project.org/)의 확장
+
+[R](https://www.r-project.org/)은 이제 단순한 통계프로그램이 아님.
+
+* [R Markdown](https://rmarkdown.rstudio.com/): 논문과 발표자료를 [R](https://www.r-project.org/) 에서 직접 만듦. [과거 정리 내용](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/)
+
+--
+
+* [blogdown](https://github.com/rstudio/blogdown): 홈페이지도 만들 수 있음. 당사 홈페이지도 이것과 [distill](https://rstudio.github.io/distill/) 로 제작.
+
+--
+
+* [Shiny](https://shiny.rstudio.com/), [Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): 서버 구축하고 웹기반 앱을 만들 수 있음.
+
+--
+
+법인 설립 후 모든 작업에 [R](https://www.r-project.org/)을 이용함. 
+
+---
+# 논문 
+
+[R](https://www.r-project.org/)에서 글, 그림, 테이블, 참고문헌까지 직접 작성. 
+ 
+* [rticles](https://github.com/rstudio/rticles): 대부분 학술지의 템플릿을 포함.
+
+&lt;img src="https://bookdown.org/yihui/rmarkdown/images/rticles-templates.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+[준비하던 박사논문](https://blog.zarathu.com/posts/2018-11-08-mdlm/)  
+
+---
+# 발표 슬라이드
+
+논문쓸 때 이용했던 R 코드 활용, 빠르게 발표 슬라이드 제작 가능.
+
+* [기본 템플릿](https://rmarkdown.rstudio.com/lesson-11.html), [xaringan](https://github.com/yihui/xaringan) 패키지: 이 슬라이드도 [xaringan](https://github.com/yihui/xaringan)으로 제작.
+
+&lt;img src="https://user-images.githubusercontent.com/163582/53144527-35f7a500-3562-11e9-862e-892d3fd7036d.gif" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# 홈페이지
+
+[blogdown](https://github.com/rstudio/blogdown), [distill](https://rstudio.github.io/distill/): [깃허브](https://pages.github.com/) 통해 무료 웹호스팅 가능.
+
+&lt;img src="https://www.storybench.org/wp-content/uploads/2019/05/blogdown-new-site-e1557149319624-730x457.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+[홈페이지](https://github.com/zarathucorp/zarathu), [블로그](https://github.com/zarathucorp/blog)
+
+
+---
+# 웹 앱
+
+[Shiny](https://shiny.rstudio.com/): [R](https://www.r-project.org/) 코드만으로 웹앱 제작
+
+&lt;img src="https://shiny.rstudio.com/images/debugging/kmeans-showcase.gif" style="display: block; margin: auto;" /&gt;
+
+---
+# 웹 대시보드 
+
+[shinydashboard](https://rstudio.github.io/shinydashboard/), [flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/) 등
+
+&lt;center&gt;
+&lt;a href="https://rmarkdown.rstudio.com/flexdashboard"&gt;&lt;img src="https://tadge-analytics.com.au/content/images/2020/01/feature-demonstration.gif" width=70%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+
+---
+# 웹 서버
+
+[Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): [Shiny](https://shiny.rstudio.com/)를 서버에서 구동.
+
+&lt;img src="https://shiny.rstudio.com/images/shiny-server-pro.png" style="display: block; margin: auto;" /&gt;
+
+[Zarathu app](http://app.zarathu.com)
+
+
+
+
+
+---
+
+class: center, middle
+
+# Shiny 소개
+
+
+---
+
+### [Shiny](https://shiny.rstudio.com/) is an R package that makes it easy to **build web applications with R**
+
+
+
+&lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/rs.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# 웹 개발 지식 없어도 됨
+
+&lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/css.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Shiny app
+
+&lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/ui.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# UI &amp; SERVER
+
+&lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/ui2.png" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+---
+
+# UI &amp; SERVER
+
+&lt;center&gt;
+&lt;a href="https://codingclubuc3m.rbind.io/post/2018-06-19/"&gt;&lt;img src="https://codingclubuc3m.rbind.io/post/2018-06-19_files/shinyApp.png" width=70%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+---
+
+# Make basic App
+
+* `app.R` 파일 만들고(**이름 바뀌면 안됨**)
+
+* `ui` 와 `server` 코드 작성 후 `shinyApp` 으로 마무리. **Run App** 눌러 실행.
+
+  - `ui.R`, `server.R` 따로 작성할 수도 있음. 개인 취향
+
+
+
+&lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/basic.png" style="display: block; margin: auto;" /&gt;
+
+---
+# 공부모임: Shiny 밋업
+
+.large[
+https://github.com/shinykorea/Meetup
+
+- 월 1회 공부내용 공유. 30회 진행 
+
+- 의료/유전학/축산/반도체/게임/IPTV/회계 등 다양한 분야 사람들이 모임. 
+
+- **경기도 코로나 대시보드 공동작업**
+
+- 21년 공개SW기반 **커뮤니티** 지원사업, **韓中日 공개SW** 국제협력 강화 TASK 선정
+
+
+]
+
+
+
+---
+class: center, middle
+
+# CDM with R
+
+---
+# R first
+
+.large[
+CDM 분석 모든과정은 [R패키지](https://github.com/OHDSI)로 구현됨.
+]
+
+&lt;center&gt;
+&lt;img src="https://www.ohdsi.org/wp-content/uploads/2020/06/methodsLibrary.png" width=70%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+---
+# 분석코드, 결과도 R패키지
+
+.large[
+연구설계, 분석방법이 포함된 자체 R패키지가 코드공유 표준. 
+
+- R패키지를 여러 기관에서 실행
+]
+
+https://github.com/zarathucorp/RanitidineCancerRisk
+
+--
+.large[
+분석결과는 R Shiny로 
+
+- 실행결과를 R기반 웹애플리케이션으로 표현
+
+- 분석코드에 웹코드도 포함되어있음.
+]
+
+
+
+
+---
+
+class: center, middle
+
+# 분석환경관리
+
+
+---
+# 리눅스
+
+---
+# 클라우드
+
+---
+# Docker
+
+.large[
+데이터 분석용 가상머신([docker](https://www.docker.com/) image)
+
+- [rshiny](https://github.com/jinseob2kim/docker-rshiny): [Rstudio](https://www.rstudio.com/)와 [shiny server](https://www.rstudio.com/products/shiny/shiny-server/) 가 설치된 이미지.
+]
+
+
+---
+# 발표: 개발환경구축
+&lt;center&gt;
+&lt;a href="https://blog.zarathu.com/posts/2018-11-08-ruck2018/"&gt;&lt;img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/RUCK2018.jpg" width=80%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+
+
+---
+# Executive summary
+
+.large[
+- 분석: 데이터전처리, 분석, Github 코드관리
+
+- 서비스: 리포트, 웹 애플리케이션
+
+- 분석환경관리: 리눅스, 클라우드, Docker
+]
+
+---
+
+class: center, middle
+
+# END
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">\n  <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">\n  </div>\n</div>\n",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
