@@ -266,7 +266,7 @@ print(doc, target = "reports/rvg.pptx")
 
 - SAS는 R서버 RAM보다 큰 데이터 다룰 때만: 크게크게 쳐냄
 
-- 반출 테이블: xlsx 하나에 탭들로 저장, [openxlsx]() 패키지 이용
+- 반출 테이블: xlsx 하나에 탭들로 저장, [openxlsx](https://github.com/ycphs/openxlsx) 패키지 이용
 
 - 반출 그림: pptx 하나에 여러 슬라이드로 저장. [officer](https://davidgohel.github.io/officer/)
 
@@ -274,16 +274,44 @@ print(doc, target = "reports/rvg.pptx")
 
 
 ---
-# [openxlsx]
+# [openxlsx](https://github.com/ycphs/openxlsx)
 
+```r
+# create workbook
+wb <- createWorkbook()
+addWorksheet(wb = wb, sheetName = "htwt")
+writeData(wb = wb, sheet = "htwt", x = htwt)
 
+addWorksheet(wb = wb, sheetName = "smk")
+writeData(wb = wb, sheet = "smk", x = smk, rowNames=T)
+
+saveWorkbook(wb, "tables.xlsx", overwrite = T) 
+```
+.large[
+[반출 파일 실습](https://github.com/jinseob2kim/R-skku-biohrs/blob/main/lecture/dataexport.pptx?raw=true)
+]
 
 
 ---
 
 # 통계 
 
+.large[
 
+Table 1 바로 만들기
+- [tableone](https://github.com/kaz-yos/tableone), [jstable](https://github.com/jinseob2kim/jstable), [gtsummary](https://www.danieldsjoberg.com/gtsummary/), [ztable](https://cran.r-project.org/web/packages/ztable/vignettes/ztable.html)
+
+
+회귀분석, 생존분석, GEE, GLMM 테이블 만들기
+- [jstable](https://github.com/jinseob2kim/jstable), [gtsummary](https://www.danieldsjoberg.com/gtsummary/)
+
+Non-linear(GAM) model
+- [mgcv](https://www.maths.ed.ac.uk/~swood34/mgcv/)
+
+ML general
+- [caret](https://topepo.github.io/caret/index.html)
+
+]
 
 
 
