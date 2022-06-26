@@ -466,7 +466,7 @@ jstable::glmshow.display(glm_binomial, decimal = 2)$table %>% kable
 ---
 # [생존분석 심화](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/)
 
-.large[
+
 **Time-dependent  coefficients**
 - 비례위험가정 깨질 때, Landmark analysis
 
@@ -474,14 +474,14 @@ jstable::glmshow.display(glm_binomial, decimal = 2)$table %>% kable
 - 관찰 시작 후 covariate 상태가 바뀔때 (ex: 약물복용) 
 
 예: 피부질환 진단 후(Indexdate) 약물치료 여부에 따른 Outcome
-- **Indexdate ~ 약물치료일, 약물치료일 ~ F/U 마지막날**: 한 사람의 데이터를 2개로 나눔.
+- **Indexdate ~ 약물치료일, 약물치료일 ~ F/U 마지막날** 한 사람의 데이터를 2개로 나눔.
 
 Competing risk analysis: 최신 `survival` 패키지 기본옵션. 
 
 - 심혈관질환 발생할 사람이었는데 죽어서 못본다?
 
+- 심혈관질환: outcome, 사망: competing risk
 
-]
 
 
 ---
@@ -498,16 +498,6 @@ jskm::jskm(fit, mark = F,  surv.scale = "percent", pval =T, table = T, cut.landm
 ```
 
 
----
-# Competing risk analysis
-
-.large[
-최신 `survival` 패키지에서 기본으로 제공됨. 
-
-```r
-
-```
-]
 
 ---
 # Meta analysis
