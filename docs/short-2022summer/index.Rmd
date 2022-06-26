@@ -17,14 +17,23 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      ratio: "4:3" 
+      ratio: "4:3"
 subtitle: "규제과학과 단기 교육 프로그램"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
-library(knitr);library(DT);library(shiny)
+library(knitr);library(DT);library(shiny);library(survival);library(survey)
+for (v in c("sex", "status")){
+  colon[[v]] <- factor(colon[[v]])
+}
+data(nhanes)
+nhanes$HI_CHOL <- factor(nhanes$HI_CHOL)
+nhanes$race <- factor(nhanes$race)
+nhanes$RIAGENDR <- factor(nhanes$RIAGENDR)
 ```
 
 
@@ -45,7 +54,7 @@ layout: true
 
 - R로 ppt/xlsx 만들기(분석결과 반출)
 
-- 일반, 반복측정, 표본추출, Propensity, meta, 시계열
+- 일반, 반복측정, 표본추출, Propensity, meta, 시계열, ML
 
 - 코드관리는 Github
 
@@ -81,7 +90,35 @@ class: center, middle
 <img src="https://openstat.ai/static/img/services/GeneralApps/metaAnalysis.png" width=80%></a>
 </center>
 
+---
+# 프로그램 개발, 블로그 운영
 
+.large[
+[R](https://www.r-project.org/) packages
+
+- [jstable](https://github.com/jinseob2kim/jstable): 논문용 테이블 만들기
+
+
+- [jskm](https://github.com/jinseob2kim/jskm): 생존분석 그림 만들기
+
+
+- [jsmodule](https://github.com/jinseob2kim/jsmodule): 웹에서 하는 통계분석
+]
+
+
+---
+# 80,000 다운로드
+
+<center>
+<img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/korea-preventive/cran.png" width=80%></a>
+</center>
+
+
+---
+# 발표: R패키지 개발 후기
+<center>
+<img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/RUCK2019.jpg" width=80%></a>
+</center>
 
 ---
 # 주요 계약 
@@ -310,79 +347,237 @@ saveWorkbook(wb, "tables.xlsx", overwrite = T)
 
 
 ---
+# CDM(OMOP) with R
+
+.large[
+CDM 분석 모든과정은 [R패키지](https://github.com/OHDSI)로 구현됨.
+]
+
+<center>
+<img src="https://www.ohdsi.org/wp-content/uploads/2020/06/methodsLibrary.png" width=70%></a>
+</center>
+
+
+---
+# 분석코드, 결과도 R패키지
+
+.large[
+연구설계, 분석방법이 포함된 자체 R패키지가 코드공유 표준. 
+
+- R패키지를 여러 기관에서 실행
+]
+
+https://github.com/zarathucorp/RanitidineCancerRisk
+
+--
+.large[
+분석결과는 R Shiny로 
+
+- 실행결과를 R기반 웹애플리케이션으로 표현
+
+- 분석코드에 웹코드도 포함되어있음.
+]
+
+
+
+---
 
 # 통계 
 
 .large[
 
-Table 1 바로 만들기
-- [tableone](https://github.com/kaz-yos/tableone), [jstable](https://github.com/jinseob2kim/jstable), [gtsummary](https://www.danieldsjoberg.com/gtsummary/), [ztable](https://cran.r-project.org/web/packages/ztable/vignettes/ztable.html)
+데이터 형태에 따라 
+- 일반, 반복측정, 표본추출, Propensity/IPTW
+
+생존분석: Time-dependent analysis, landmark analysis
+
+메타분석: [meta](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/), [자체 개발앱](https://openstat.ai/app/meta-analysis/)
+
+시계열분석: [fpp3 교과서](https://otexts.com/fpp3/)- ARIMA, [prophet](https://facebook.github.io/prophet/)
+
+ML general: [caret](https://topepo.github.io/caret/index.html)
+
+Non-linear(GAM) model: [mgcv](https://www.maths.ed.ac.uk/~swood34/mgcv/)
 
 
-회귀분석, 생존분석, GEE, GLMM 테이블 만들기
-- [jstable](https://github.com/jinseob2kim/jstable), [gtsummary](https://www.danieldsjoberg.com/gtsummary/)
+]
 
+---
+# 분석(X), 결과테이블(O)
+
+```{r, echo=T}
+tb <- jstable::CreateTableOneJS(c("sex", "age", "status", "time"), strata = "rx", data = colon, nonnormal = "time")
+kable(tb$table[, 1:6])
+```
+
+---
+# 표본추출(국건영)
+
+```{r, echo=T}
+nhanesSvy <- svydesign(ids = ~ SDMVPSU, strata = ~ SDMVSTRA, weights = ~ WTMEC2YR, nest = T, data = nhanes)
+tb <- jstable::svyCreateTableOneJS(c("HI_CHOL", "agecat"), strata = "RIAGENDR", data = nhanesSvy)
+kable(tb$table[, 1:5])
+```
+
+---
+# 회귀분석류 table 만들기 
+
+```{r, echo=T}
+glm_gaussian <- glm(mpg~cyl + disp, data = mtcars)
+jstable::glmshow.display(glm_gaussian, decimal = 2)$table %>% kable
+
+glm_binomial <- glm(vs~cyl + disp, data = mtcars, family = binomial)
+jstable::glmshow.display(glm_binomial, decimal = 2)$table %>% kable
+
+```
+
+[더 살펴보기](https://github.com/jinseob2kim/jstable)
+
+
+---
+# Propensity score
+
+.large[
+
+그룹간의 baseline 맞춰주는 방법
+
+- **Matching**: 적당한 사람들을 뽑음, N loss
+
+- **IPTW(Inverse probability treatment weighting)**: 사람마다 가중치를 다르게 줌, N loss 無
+
+- [MatchIt](https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html): 2그룹 PS matching, IPTW 
+
+- [twang](https://cran.r-project.org/web/packages/twang/index.html) : 3그룹 이상 IPTW
+]
+
+
+
+
+---
+# [생존분석 심화](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/)
+
+.large[
+**Time-dependent  coefficients**
+- 비례위험가정 깨질 때 
+
+- Kaplan-meier plot with Landmark analysis
+
+**Time-dependent covariate**
+- 관찰 시작 후 covariate 상태가 바뀔때 (ex: 약물복용) 
+
+예: 피부질환 진단 후(Indexdate) 약물치료 여부에 따른 Outcome
+- **Indexdate ~ 약물치료일, 약물치료일 ~ F/U 마지막날**: 한 사람의 데이터를 2개로 나눔.
+
+Competing risk analysis
+
+- 심혈관질환 발생할 사람이었는데 죽어서 못본다?
+
+]
+
+
+---
+# Landmark analysis
+
+```{r, include=F}
+colon$status <- as.integer(as.character(colon$status))
+```
+
+```{r, echo=T, out.width="50%"}
+fit <- survfit(Surv(time,status)~rx, data=colon)
+jskm::jskm(fit, mark = F,  surv.scale = "percent", pval =T, table = T, cut.landmark = 500, showpercent = T)
+
+```
+
+
+---
+# Meta analysis
+
+.large[
+[meta](https://github.com/guido-s/meta/) 패키지가 표준
+- Forest/Drapery plot, Sub-group analysis
+
+- Random/Fixed effect
+
+- Publication bias: Funnel plot/Trim & fill 
+]
+
+[자체 개발앱](https://openstat.ai/app/meta-analysis/)
+
+
+
+---
+# 시계열
+
+.large[
+[fpp3](https://otexts.com/fpp3/) 교과서 추천
+
+- [tsibble](https://tsibble.tidyverts.org/): 시계열 데이터전처리 
+
+- [fable](https://fable.tidyverts.org/): ARIMA 계수 자동추정, 간단한 시계열 인공신경망
+
+- [prophet](https://facebook.github.io/prophet/): Meta 가 개발한 Additive model 기반 패키지 
+]
+
+<center>
+<a href="https://www.youtube.com/watch?v=6v3_AsbhqrE"><img src="https://i.ytimg.com/vi/6v3_AsbhqrE/maxresdefault.jpg" width=40%></a>
+</center>
+
+
+
+---
+# ETC
+
+.large[
 Non-linear(GAM) model
-- [mgcv](https://www.maths.ed.ac.uk/~swood34/mgcv/)
+- [mgcv](https://www.maths.ed.ac.uk/~swood34/mgcv/) 패키지가 표준
 
 ML general
 - [caret](https://topepo.github.io/caret/index.html)
-
 ]
 
 
-
-
-
-
-
 ---
-# 프로그램 개발, 블로그 운영
+# [Github](https://github.com/)
 
 .large[
-[R](https://www.r-project.org/) packages
+코딩하는 사람은 무조건 써야함. R보다 더 중요
 
-- [jstable](https://github.com/jinseob2kim/jstable): 논문용 테이블 만들기
+- 코드 관리, 모든 중간기록 보관
 
+- 오픈소스 SW(예: R패키지) 는 대부분 Github 프로젝트
 
-- [jskm](https://github.com/jinseob2kim/jskm): 생존분석 그림 만들기
+- 포트폴리오 관리: 사실상의 이력서
 
-
-- [jsmodule](https://github.com/jinseob2kim/jsmodule): 웹에서 하는 통계분석
+- 간단한 홈페이지 운영 가능: 본 슬라이드도 Github 호스팅
 ]
 
 
----
-# 80,000 다운로드
-
-<center>
-<img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/korea-preventive/cran.png" width=80%></a>
-</center>
-
 
 ---
-# 발표: R패키지 개발 후기
-<center>
-<img src="https://raw.githubusercontent.com/jinseob2kim/lecture-general/master/docs/snu-premed/RUCK2019.jpg" width=80%></a>
-</center>
 
+class: center, middle
+
+# 서비스
 
 
 ---
 # [R](https://www.r-project.org/)의 확장
 
+.large[
 [R](https://www.r-project.org/)은 이제 단순한 통계프로그램이 아님.
 
 * [R Markdown](https://rmarkdown.rstudio.com/): 논문과 발표자료를 [R](https://www.r-project.org/) 에서 직접 만듦. [과거 정리 내용](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/)
-
+]
 --
 
+.large[
 * [blogdown](https://github.com/rstudio/blogdown): 홈페이지도 만들 수 있음. 당사 홈페이지도 이것과 [distill](https://rstudio.github.io/distill/) 로 제작.
-
+]
 --
 
+.large[
 * [Shiny](https://shiny.rstudio.com/), [Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): 서버 구축하고 웹기반 앱을 만들 수 있음.
-
+]
 --
 
 법인 설립 후 모든 작업에 [R](https://www.r-project.org/)을 이용함. 
@@ -390,6 +585,7 @@ ML general
 ---
 # 논문 
 
+.large[
 [R](https://www.r-project.org/)에서 글, 그림, 테이블, 참고문헌까지 직접 작성. 
  
 * [rticles](https://github.com/rstudio/rticles): 대부분 학술지의 템플릿을 포함.
@@ -398,11 +594,15 @@ ML general
 include_graphics("https://bookdown.org/yihui/rmarkdown/images/rticles-templates.png")
 ```
 
+]
+
 [준비하던 박사논문](https://blog.zarathu.com/posts/2018-11-08-mdlm/)  
+
 
 ---
 # 발표 슬라이드
 
+.large[
 논문쓸 때 이용했던 R 코드 활용, 빠르게 발표 슬라이드 제작 가능.
 
 * [기본 템플릿](https://rmarkdown.rstudio.com/lesson-11.html), [xaringan](https://github.com/yihui/xaringan) 패키지: 이 슬라이드도 [xaringan](https://github.com/yihui/xaringan)으로 제작.
@@ -410,11 +610,14 @@ include_graphics("https://bookdown.org/yihui/rmarkdown/images/rticles-templates.
 ```{r, out.width= "80%"}
 include_graphics("https://user-images.githubusercontent.com/163582/53144527-35f7a500-3562-11e9-862e-892d3fd7036d.gif")
 ```
+]
+
 
 
 ---
 # 홈페이지
 
+.large[
 [blogdown](https://github.com/rstudio/blogdown), [distill](https://rstudio.github.io/distill/): [깃허브](https://pages.github.com/) 통해 무료 웹호스팅 가능.
 
 ```{r, out.width= "80%"}
@@ -422,23 +625,17 @@ include_graphics("https://www.storybench.org/wp-content/uploads/2019/05/blogdown
 ```
 
 [홈페이지](https://github.com/zarathucorp/zarathu), [블로그](https://github.com/zarathucorp/blog)
-
+]
 
 ---
 # 웹 앱
 
+.large[
 [Shiny](https://shiny.rstudio.com/): [R](https://www.r-project.org/) 코드만으로 웹앱 제작
-
+]
 ```{r}
 include_graphics("https://shiny.rstudio.com/images/debugging/kmeans-showcase.gif")
 ```
-
-
-
-
-
-
-
 
 
 
@@ -489,16 +686,6 @@ include_graphics("https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/mas
 
 
 
-
----
-
-# UI & SERVER
-
-<center>
-<a href="https://codingclubuc3m.rbind.io/post/2018-06-19/"><img src="https://codingclubuc3m.rbind.io/post/2018-06-19_files/shinyApp.png" width=70%></a>
-</center>
-
-
 ---
 
 # Make basic App
@@ -516,12 +703,24 @@ include_graphics("https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/mas
 ```
 
 ---
+# Shinyapps.io
+
+.large[
+간단한 Shiny 앱들은 무료호스팅
+
+- 한국 region 아니라 느림
+]
+
+
+
+
+---
 # 공부모임: Shiny 밋업
 
 .large[
 https://github.com/shinykorea/Meetup
 
-- 월 1회 공부내용 공유. 30회 진행 
+- 월 1회 공부내용 공유. 36회 진행 
 
 - 의료/유전학/축산/반도체/게임/IPTV/회계 등 다양한 분야 사람들이 모임. 
 
@@ -534,51 +733,12 @@ https://github.com/shinykorea/Meetup
 
 
 
----
-class: center, middle
-
-# CDM with R
-
----
-# R first
-
-.large[
-CDM 분석 모든과정은 [R패키지](https://github.com/OHDSI)로 구현됨.
-]
-
-<center>
-<img src="https://www.ohdsi.org/wp-content/uploads/2020/06/methodsLibrary.png" width=70%></a>
-</center>
-
-
----
-# 분석코드, 결과도 R패키지
-
-.large[
-연구설계, 분석방법이 포함된 자체 R패키지가 코드공유 표준. 
-
-- R패키지를 여러 기관에서 실행
-]
-
-https://github.com/zarathucorp/RanitidineCancerRisk
-
---
-.large[
-분석결과는 R Shiny로 
-
-- 실행결과를 R기반 웹애플리케이션으로 표현
-
-- 분석코드에 웹코드도 포함되어있음.
-]
-
-
-
 
 ---
 
 class: center, middle
 
-# 분석환경관리
+# 서버
 
 
 ---
