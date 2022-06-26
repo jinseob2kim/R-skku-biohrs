@@ -501,9 +501,7 @@ jstable::glmshow.display(glm_binomial, decimal = 2)$table %&gt;% kable
 
 .large[
 **Time-dependent  coefficients**
-- 비례위험가정 깨질 때 
-
-- Kaplan-meier plot with Landmark analysis
+- 비례위험가정 깨질 때, Landmark analysis
 
 **Time-dependent covariate**
 - 관찰 시작 후 covariate 상태가 바뀔때 (ex: 약물복용) 
@@ -511,9 +509,10 @@ jstable::glmshow.display(glm_binomial, decimal = 2)$table %&gt;% kable
 예: 피부질환 진단 후(Indexdate) 약물치료 여부에 따른 Outcome
 - **Indexdate ~ 약물치료일, 약물치료일 ~ F/U 마지막날**: 한 사람의 데이터를 2개로 나눔.
 
-Competing risk analysis
+Competing risk analysis: 최신 `survival` 패키지 기본옵션. 
 
 - 심혈관질환 발생할 사람이었는데 죽어서 못본다?
+
 
 ]
 
@@ -531,6 +530,17 @@ jskm::jskm(fit, mark = F,  surv.scale = "percent", pval =T, table = T, cut.landm
 
 &lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
+
+---
+# Competing risk analysis
+
+.large[
+최신 `survival` 패키지에서 기본으로 제공됨. 
+
+```r
+
+```
+]
 
 ---
 # Meta analysis
@@ -619,7 +629,8 @@ class: center, middle
 --
 
 .large[
-* [Shiny](https://shiny.rstudio.com/), [Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): 서버 구축하고 웹기반 앱을 만들 수 있음.
+* [Shiny](https://shiny.rstudio.com/), [Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/): 서버 구축하고 웹기반 앱을 만들 수 있음. 간단한 Shiny 앱들은 Shinyapps.io 에서 무료호스팅.
+
 ]
 --
 
@@ -648,8 +659,12 @@ class: center, middle
 
 * [기본 템플릿](https://rmarkdown.rstudio.com/lesson-11.html), [xaringan](https://github.com/yihui/xaringan) 패키지: 이 슬라이드도 [xaringan](https://github.com/yihui/xaringan)으로 제작.
 
-&lt;img src="https://user-images.githubusercontent.com/163582/53144527-35f7a500-3562-11e9-862e-892d3fd7036d.gif" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://user-images.githubusercontent.com/163582/53144527-35f7a500-3562-11e9-862e-892d3fd7036d.gif" width="70%" style="display: block; margin: auto;" /&gt;
+
+포스터: [posterdown](https://brentthorne.github.io/posterdown_html_showcase/), [pagedown](https://pagedown.rbind.io/poster-relaxed)
 ]
+
+
 
 
 
@@ -713,16 +728,6 @@ class: center, middle
 
 
 
-
----
-
-# UI &amp; SERVER
-
-&lt;center&gt;
-&lt;a href="https://codingclubuc3m.rbind.io/post/2018-06-19/"&gt;&lt;img src="https://codingclubuc3m.rbind.io/post/2018-06-19_files/shinyApp.png" width=70%&gt;&lt;/a&gt;
-&lt;/center&gt;
-
-
 ---
 
 # Make basic App
@@ -736,6 +741,11 @@ class: center, middle
 
 
 &lt;img src="https://github.com/jinseob2kim/shiny-workshop-odsc2019/raw/master/docs/basic.png" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
 
 ---
 # 공부모임: Shiny 밋업
@@ -765,10 +775,38 @@ class: center, middle
 
 
 ---
-# 리눅스
+# 분석환경 
+
+.large[
+빅데이터분석은 대부분 리눅스 서버에서
+- 공단/심평원 R server
+
+서버 초기세팅(RStudio, 패키지, Shiny 설치) 위한 리눅스 지식(ubuntu or fedora)
+
+]
+&lt;center&gt;
+&lt;a href="https://affizon.com/ko/fedora-%EB%8C%80-ubuntu-%EC%96%B4%EB%96%A4-linux-%EB%B0%B0%ED%8F%AC%EA%B0%80-%EB%8D%94-%EB%82%AB%EC%8A%B5%EB%8B%88%EA%B9%8C"&gt;&lt;img src="https://affizon.com/wp-content/uploads/2021/10/Fedora-%D1%81%D1%80%D0%B5%D1%89%D1%83-Ubuntu-%D0%9A%D0%BE%D1%8F-%D0%B4%D0%B8%D1%81%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%86%D0%B8%D1%8F-%D0%BD%D0%B0-Linux-%D0%B5-%D0%BF%D0%BE-%D0%B4%D0%BE%D0%B1%D1%80%D0%B0.jpg?ezimgfmt=rs:372x210/rscb1/ng:webp/ngcb1" width=70%&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+]
+
 
 ---
-# 클라우드
+# 서버 바뀌면?
+
+.large[
+서버 바뀔때 마다 새로 세팅?
+- R 패키지 설치에만 1시간 이상 걸림(리눅스는 오래걸림)
+
+아예 초기세팅 완료된 가상머신을 만들어놓자. 그러나 Virtual Machine(VM) 은 너무 느림
+
+- [Docker](https://www.docker.com/)는 리눅스기반 컨테이너 서비스.
+
+- [rocker project](https://www.rocker-project.org/): R 관련 Docker image 모음
+
+- RStudio, 패키지, Shiny server 모두 설치된 [rshiny image](https://github.com/jinseob2kim/docker-rshiny) 자체 개발 
+]
+
 
 
 ---
@@ -857,19 +895,23 @@ class: center, middle
 &lt;p class="caption"&gt;https://doi.org/10.1371/journal.pone.0152686&lt;/p&gt;
 &lt;/div&gt;
 
+
 ---
-# [Docker hub](https://hub.docker.com/) 활용 예
+# 클라우드
 
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="http://edu.delestra.com/docker-slides/img/docker_hub_auto_build.png" alt="http://edu.delestra.com/docker-slides/img/docker_hub_auto_build.png" width="70%" /&gt;
-&lt;p class="caption"&gt;http://edu.delestra.com/docker-slides/img/docker_hub_auto_build.png&lt;/p&gt;
-&lt;/div&gt;
+.large[
+물리서버 필요없음, 쓴만큼 요금부과 
+- AWS, Azure, 네이버, [vultr](https://www.vultr.com/)(한국 region 있으면서 가장저렴)
 
-- [rshiny docker image](https://hub.docker.com/r/jinseob2kim/docker-rshiny/)
+OMOM-CDM 실습환경이 [AWS](https://github.com/OHDSI/OHDSIonAWS)로 제공됨 
 
+[openstat.ai](https://openstat.ai) 도 클라우드에서 운영
 
-- [rshiny github](https://github.com/jinseob2kim/docker-rshiny)
+]
 
+&lt;center&gt;
+&lt;a href="https://github.com/OHDSI/OHDSIonAWS"&gt;&lt;img src="https://raw.githubusercontent.com/OHDSI/OHDSIonAWS/master/images/ohdsi_architecture_block_diagram.png" width=55%&gt;&lt;/a&gt;
+&lt;/center&gt;
 
 
 ---
