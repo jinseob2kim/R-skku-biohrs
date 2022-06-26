@@ -103,6 +103,13 @@ class: center, middle
 
 
 - [jsmodule](https://github.com/jinseob2kim/jsmodule): 웹에서 하는 통계분석
+
+
+개발환경 배포
+- [rshiny image](https://github.com/jinseob2kim/docker-rshiny)
+
+블로그: https://blog.zarathu.com
+
 ]
 
 
@@ -247,6 +254,9 @@ R 기본문법 대체, 사실상 표준문법.
 <a href="https://www.storybench.org/getting-started-with-tidyverse-in-r/"><img src="https://www.storybench.org/wp-content/uploads/2017/05/tidyverse.png" width=100%></a>
 </center>
 
+<center>
+<a href="http://ds4ps.org/dp4ss-textbook/p-072-data-recipes.html"><img src="http://ds4ps.org/dp4ss-textbook/figures/chaining_data_verbs.png" width=70%></a>
+</center>
 
 
 ---
