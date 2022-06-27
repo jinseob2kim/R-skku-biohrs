@@ -8,12 +8,12 @@ output:
     css: ["css/footer-header.css", "default"]
     lib_dir: libs
     nature:
+        </div>
       beforeInit: "js/macros.js"
       slideNumberFormat: |
         <div class="progress-bar-container">
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
           </div>
-        </div>
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
@@ -34,6 +34,7 @@ data(nhanes)
 nhanes$HI_CHOL <- factor(nhanes$HI_CHOL)
 nhanes$race <- factor(nhanes$race)
 nhanes$RIAGENDR <- factor(nhanes$RIAGENDR)
+
 ```
 
 
