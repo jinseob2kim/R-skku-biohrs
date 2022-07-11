@@ -8,16 +8,16 @@ output:
     css: ["css/footer-header.css", "default"]
     lib_dir: libs
     nature:
-        </div>
       beforeInit: "js/macros.js"
       slideNumberFormat: |
         <div class="progress-bar-container">
-          </div>
           <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      ratio: "4:3"
+      ratio: "4:3" 
 subtitle: "규제과학과 단기 교육 프로그램"
 editor_options: 
   chunk_output_type: console
@@ -915,6 +915,39 @@ OMOM-CDM 실습환경이 [AWS](https://github.com/OHDSI/OHDSIonAWS)로 제공됨
 서버: 분석환경 or 웹 서비스
 - 리눅스, 클라우드, Docker 
 ]
+
+---
+# 철강왕 박태준
+
+.large[
+> 선조의 피값(대일 청구권 자금)으로 짓는 제철소, 실패하면 영일만에 빠져 죽자
+]
+
+<center>
+<img src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201511/29/htm_2015112912557808759.jpg" width=40%></a>
+</center>
+
+
+
+
+
+---
+# 医俠(의협) = 義俠
+
+.large[
+> 피눈물로 만들어진 데이터, 실패하면 한강에 빠져 죽자 
+
+
+- 암환자 췌장절제여부 데이터를 보면서 
+
+- 최악과 차악뿐인 선택지를 두고 눈물흘리는 환자들과 의료진이 떠올랐고
+
+- 눈물이났다. 
+]
+
+
+
+
 
 ---
 
