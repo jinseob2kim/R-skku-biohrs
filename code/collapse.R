@@ -73,7 +73,6 @@ fselect(dt, HGHT, WGHT)
 fselect(dt, Height = HGHT, Weight = WGHT)
 
 fselect(dt, .(HGHT))              #ERROR
-fselect(dt, "HGHT")               #ERROR  
 qM(dt$HGHT)                       #qM() converts matrix
 
 
