@@ -25,7 +25,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
  - R 개발자 커뮤니티 [Shinykorea](https://github.com/Shinykorea) 후원 및 운영
  - [SW마에스트로](https://www.swmaestro.org/sw/main/main.do) 멘토
 
-온라인 조교: [김유민](https://github.com/yumin9-kim), yumin.kim@zarathu.com
+온라인 조교: [이건희](lisalee1208@naver.com)
 
 
 ## 일정 
