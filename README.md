@@ -34,21 +34,21 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 
 |회차| 날짜  | 주제  |
 |---|---|---|
-|1| 2월 21일  | 강의계획안내, [깃허브(github)](code/github.R), [공공의료빅데이터 소개](lecture/공단데이터소개.pdf)  |
-|2| 2월 28일  | R 데이터 매니지먼트 [base](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic), [code](code/base.R)  |
-|3|  3월 7일|  R 데이터 매니지먼트 최근: [tidyverse](https://jinseob2kim.github.io/lecture-snuhlab/tidyverse) |
-|4|   3월 14일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/), [code](code/datatable.R)  |
-|5|  3월 21일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
-|6|  3월 28일| R 데이터 시각화: [강의록](https://blog.zarathu.com/posts/2022-03-25-graph/), [code](code/plot/), [ggplot2 참고자료](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
-|7|  4월 4일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/), [code](code/descriptive.R), [tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummary/)|
-|8|  4월 11일| 중간고사 |
-|9|  4월 18일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/), [리뷰어 위한 의학통계](https://jinseob2kim.github.io/lecture-general/statreview/#59) 
-|10|  4월 25일| R 통계(3): [성향점수 매칭, 가중치](code/table1_ps.R), [국건영데이터 소개](https://knhanes.kdca.go.kr/knhanes/sub03/sub03_01.do), [code](code/KNHANES.R) |
-|11|  5월 2일| R로 보고서쓰기: [Rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/), [엑셀, ppt로 저장하기](lecture/dataexport.pptx) |
-|12|  5월 9일| R로 홈페이지/블로그 만들기: [blogdown](https://pkgs.rstudio.com/blogdown/), [distill](https://rstudio.github.io/distill/), [bookdown](https://bookdown.org/), [xaringan](https://slides.yihui.org/xaringan/#1) |
-|13|  5월 16일| R로 웹앱 만들기: [Shiny 소개](https://github.com/jinseob2kim/shiny-workshop-odsc2019) |
-|14|  5월 23일| [R 패키지 만들기](https://github.com/jinseob2kim/RTHON2020) |
-|15|  5월 30일| [기말고사](https://jinseob2kim.github.io/finalexam/finalexam.html) |
+|1| 8월 30일  | 강의계획안내, [깃허브(github)](code/github.R), [공공의료빅데이터 소개](lecture/공단데이터소개.pdf)  |
+|2| 9월 6일  | R 데이터 매니지먼트 [base](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic), [code](code/base.R)  |
+|3|  9월 13일|  R 데이터 매니지먼트 최근: [tidyverse](https://jinseob2kim.github.io/lecture-snuhlab/tidyverse) |
+|4|   9월 20일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/), [code](code/datatable.R)  |
+|5|  9월 27일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
+|6|  10월 4일| R 데이터 시각화: [강의록](https://blog.zarathu.com/posts/2022-03-25-graph/), [code](code/plot/), [ggplot2 참고자료](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
+|7|  10월 11일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/), [code](code/descriptive.R), [tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummary/)|
+|8|  10월 18일| 중간고사 |
+|9|  10월 25일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/), [리뷰어 위한 의학통계](https://jinseob2kim.github.io/lecture-general/statreview/#59) 
+|10|  11월 1일| R 통계(3): [성향점수 매칭, 가중치](code/table1_ps.R), [국건영데이터 소개](https://knhanes.kdca.go.kr/knhanes/sub03/sub03_01.do), [code](code/KNHANES.R) |
+|11|  11월 8일| R로 보고서쓰기: [Rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/), [엑셀, ppt로 저장하기](lecture/dataexport.pptx) |
+|12|  11월 15일| R로 홈페이지/블로그 만들기: [blogdown](https://pkgs.rstudio.com/blogdown/), [distill](https://rstudio.github.io/distill/), [bookdown](https://bookdown.org/), [xaringan](https://slides.yihui.org/xaringan/#1) |
+|13|  11월 22일| R로 웹앱 만들기: [Shiny 소개](https://github.com/jinseob2kim/shiny-workshop-odsc2019) |
+|14|  11월 29일| [R 패키지 만들기](https://github.com/jinseob2kim/RTHON2020) |
+|15|  12월 6일| [기말고사](https://jinseob2kim.github.io/finalexam/finalexam.html) |
 
 ## 특강
 |1| 22.07.15| [데이터과학자가 갖춰야할 기술: 규제과학과 단기 교육](https://jinseob2kim.github.io/R-skku-biohrs/short-2022summer) |
