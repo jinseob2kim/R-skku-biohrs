@@ -160,10 +160,9 @@ plot(m1, shade = T)   ## plot(m1, select = 1)
 Smoothing spline: basis function 들의 합
 
 ```{r}
-library(reactable)
 model_matrix <- predict(m1, type = "lpmatrix", newdata = data.frame(age = sort(colon$age), sex = 1))
 
-reactable(model_matrix)
+DT::datatable(round(model_matrix, 2), rownames = F, options = list(scrollX = T,scrollCollapse = T))
 ```
 
 ## Basis function(2)
@@ -182,8 +181,8 @@ model_matrix 에 계수를 곱하면 곡선의 y값
 coef(m1)
 
 par(mfrow = c(1, 2))
-plot(sort(colon$age), model_matrix %*% coef(m1), type = "l")
-plot(m1, shade = T)   ## plot(m1, select = 1)
+plot(sort(colon$age), model_matrix[,-c(1:2)] %*% coef(m1)[-c(1:2)], type = "l")
+plot(m1, shade = T, se = F)   ## plot(m1, select = 1)
 ```
 
 ## Change basis function
