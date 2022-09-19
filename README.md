@@ -44,7 +44,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |8|  10월 18일| 중간고사 |
 |9|  10월 25일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/), [code](code/descriptive.R), [tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummary/) |
 |10|  11월 1일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/), [리뷰어 위한 의학통계](https://jinseob2kim.github.io/lecture-general/statreview/#59)  |
-|11|  11월 8일| R 통계(3): [성향점수 매칭, 가중치](code/table1_ps.R), [국건영데이터 소개](https://knhanes.kdca.go.kr/knhanes/sub03/sub03_01.do), [code](code/KNHANES.R) |
+|11|  11월 8일| R 통계(3): [비선형모형: GAM](https://jinseob2kim.github.io/R-skku-biohrs/gam), [성향점수 매칭, 가중치](code/table1_ps.R), [국건영데이터 소개](https://knhanes.kdca.go.kr/knhanes/sub03/sub03_01.do), [code](code/KNHANES.R) |
 |12|  11월 15일| R로 보고서쓰기: [Rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/), [엑셀, ppt로 저장하기](lecture/dataexport.pptx) |
 |13|  11월 22일| R로 웹앱 만들기: [Shiny 소개](https://github.com/jinseob2kim/shiny-workshop-odsc2019) |
 |14|  11월 29일| [R 패키지 만들기](https://github.com/jinseob2kim/RTHON2020) |

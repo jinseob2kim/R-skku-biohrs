@@ -40,33 +40,27 @@ GAM 은 비선형관계를 다루는 통계방법이다
 -   Count: **poisson, quasipoisson**(평균 $\neq$ 분산 일 때)
 -   Survival: **coxph**
 
-
 # GAM theory
 
 ## Non linear model
 
 \begin{align}
 Y=\beta_0+\beta_1 x_{1}+\beta_2 x_2+\cdots+\epsilon
-\end{align}
-\begin{align}
+\end{align} \begin{align}
 Y=\beta_0+ f(x_1)+\beta_2 x_2 \cdots+\epsilon
-\end{align}
- $f(x_1,x_2)$꼴의 형태도 가능
-
+\end{align} $f(x_1,x_2)$꼴의 형태도 가능
 
 ## LOWESS
 
 Locally weighted scatterplot smoothing
 
-- 구간 나눠 regression
-- 각 점마다 그 점을 포함하는 구간 설정 
-- 가까운 점에 weight
+-   구간 나눠 regression
+-   각 점마다 그 점을 포함하는 구간 설정
+-   가까운 점에 weight
 
-<center><img src="https://www.researchgate.net/publication/342187654/figure/fig3/AS:902862171299841@1592270524905/Principles-of-LOWESS-locally-weighted-scatterplot-smoothing-method-for-a-1st-order.png" width="80%"/></center>
-
+<center><img src="https://www.researchgate.net/publication/342187654/figure/fig3/AS:902862171299841@1592270524905/Principles-of-LOWESS-locally-weighted-scatterplot-smoothing-method-for-a-1st-order.png" width="50%"/></center>
 
 ## LOWESS in ggplot
-
 
 ```{r}
 library(ggplot2);library(survival);library(gridExtra)
@@ -79,26 +73,22 @@ cowplot::plot_grid(plotlist = dd, nrow = 2)
 
 ```
 
-
 ## Cubic spline
 
 Cubic = 3차방정식
 
-- 구간을 몇 개로 나누고: **knot**
-- 각각을 3차함수로 fitting
-- 구간 사이 부드럽게 연결되도록 제한조건
-
+-   구간을 몇 개로 나누고: **knot**
+-   각각을 3차함수로 fitting
+-   구간 사이 부드럽게 연결되도록 제한조건
 
 <center><a href="https://www.nature.com/articles/s41409-019-0679-x/figures/1"><img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41409-019-0679-x/MediaObjects/41409_2019_679_Fig1_HTML.png" width="60%"/></a></center>
-
 
 ## Natural cubic spline(ns)
 
 Cubic + 처음과 끝은 Linear
 
-- 처음보다 더 처음, 끝보다 더 끝(데이터에 없는 숫자)에 대한 보수적인 추정.
-- 3차보다 1차가 변화량 적음.
-
+-   처음보다 더 처음, 끝보다 더 끝(데이터에 없는 숫자)에 대한 보수적인 추정.
+-   3차보다 1차가 변화량 적음.
 
 ## Cubic spline in R
 
@@ -120,52 +110,179 @@ abline(v = c(40, 50, 60, 70), lty=2, col="black")
 legend("topleft", c("cs:knots" ,"cs:df", "ns:knots", "ns:df"), col = 1:4, lwd = 1:4)
 ```
 
-
 ## Smoothing spline
 
-GAM default
+[mgcv](https://CRAN.R-project.org/package=mgcv) R 패키지의 기본옵션.
 
+**Loess, Cubic spline**
 
+-   Span, knot를 미리 지정: local 구간을 미리 지정.
 
+Smoothing(penalized) spline
 
+-   알아서.. 데이터가 말해주는 대로..
 
-# Practice
+## Penalized regression: Smoothing
 
-## Linear
+```{=tex}
+\begin{align*}
+\text{Minimize} ||Y - X\beta||^2 + \lambda \int f''(x)^2dx
+\end{align*}
+```
+-   $\lambda\rightarrow 0$: 울퉁불퉁.
+-   $\lambda$가 커질수록 smoothing
+- $f''$ 는 기울기의 변화율, 제곱하면 절대값 의미
+
+## $\lambda$
+
+<center><img src="smoothing.png" width="100%"/></center>
+
+## Show gam result
+
+- edf(Effective df): 자유도 - shrinkage penalty 
+
 ```{r}
 library(mgcv)
+m1 <- gam(time ~ s(age) + sex, data = colon)
+summary(m1)
+
+## Lambda
+m1$sp
+#m1 <- gam(time ~ s(age, sp = 0.04120719) + sex, data = colon)
 ```
 
+## Plot
+
+```{r}
+plot(m1, shade = T)   ## plot(m1, select = 1)
+```
+
+## Basis function
+
+Smoothing spline: basis function 들의 합
+
+```{r}
+library(reactable)
+model_matrix <- predict(m1, type = "lpmatrix", newdata = data.frame(age = sort(colon$age), sex = 1))
+
+reactable(model_matrix)
+```
+
+## Basis function(2)
+
+9개의 basis function
+
+```{r}
+matplot(sort(colon$age), model_matrix[,-c(1:2)], type = "l", lty = 1, xlab = "Age", ylab = "Basis function")
+```
+
+## GAM result
+
+model_matrix 에 계수를 곱하면 곡선의 y값
+
+```{r}
+coef(m1)
+
+par(mfrow = c(1, 2))
+plot(sort(colon$age), model_matrix %*% coef(m1), type = "l")
+plot(m1, shade = T)   ## plot(m1, select = 1)
+```
+
+## Change basis function
+
+```{r}
+m2 <- gam(time ~ s(age, bs = "cr") + sex, data = colon)
+model_matrix2 <- predict(m2, type = "lpmatrix", newdata = data.frame(age = sort(colon$age), sex = 1))
+matplot(sort(colon$age), model_matrix2[,-c(1:2)], type = "l", lty = 1, xlab = "Age", ylab = "Basis function")
+```
+
+## Restricted df
+
+$k = 6$: df의 최대값을 6으로 제한
+
+```{r}
+m3 <- gam(time ~ s(age, bs = "cr", k = 6) + sex, data = colon)
+model_matrix3 <- predict(m3, type = "lpmatrix", newdata = data.frame(age = sort(colon$age), sex = 1))
+matplot(sort(colon$age), model_matrix3[,-c(1:2)], type = "l", lty = 1, xlab = "Age", ylab = "Basis function")
+```
+
+## Fix $\lambda$
+
+sp = 1000: $\lambda$ 1000으로 고정, 거의 직선을 의미
+
+```{r}
+m4 <- gam(time ~ s(age, sp = 1000) + sex, data = colon)
+plot(m4)
+```
+
+
+
+
+# Other distribution
 
 ## Logistic
 
-## Poisson
+`family = binomial`
+
+- 해석에 주의: **log Odds**  
+- **exponential** transformation, **reference(OR =1) 설정** 필요
+
 ```{r}
+m5 <- gam(status ~ s(age) + sex, data = colon, family = binomial)
+zz <- plot(m5, ylab = "Log Odds")
 
+plot(m5, trans = exp, ylab = "Odds Ratio", shade = T, shift = -min(zz[[1]]$fit))
+abline(h = 1, lty = 3)
 ```
-
-
 
 ## Coxph
 
-```{r}
-library(survival)
-gam.surv <-  gam(time ~ s(age) + sex + s(nodes) + perfor + rx+ obstruct, family=cox.ph(), data= colon, weights = status)
-
-plot(gam.surv, pages = 1)  ## all terms
-```
-
-## Coxph 2
+- `family = cox.ph`
+- `weights = status`
 
 ```{r}
-plot(gam.surv, select = 2, ylab = "Log HR") ## select terms
+m6 <-  gam(time ~ s(age) + sex + s(nodes), family=cox.ph, data= colon, weights = status)
+zz <- plot(m6, select = 1, ylab = "Log Hazard")
 
-plot(gam.surv, select = 2, trans = exp, ylab = "Hazard ratio", col = "red", shade = T, shade.col = "gray90")
+plot(m6, select = 1, trans = exp, ylab = "Hazard Ratio", shade = T, shift = -min(zz[[1]]$fit))
+abline(h = 1, lty = 3)
+```
+
+## Poisson
+
+- `family = poisson`
+- exp trans
+
+```{r}
+mort <- read.csv("mort.csv")
+m7 <- gam(nonacc ~ s(meanpm10) + s(meantemp), data = mort, family = poisson)
+
+zz <- plot(m7, select = 1, ylab = "Log RR")
+
+plot(m7, select = 1, trans = exp, ylab = "Risk Ratio", shade = T, shift = -min(zz[[1]]$fit))
+abline(h = 1, lty = 3)
 ```
 
 
+## Quasi-poisson
+
+Poisson 분포의 가정 `평균=분산` 이 만족하지 않을 때.
+
+- `family = quasipoisson`
+- $평균 = \phi * 분산$ 
+- 곡선 자체는 그대로, 신뢰구간만 넓어짐(보수적 추정)
+
+```{r}
+c(mean(mort$nonacc), var(mort$nonacc))
+m7$scale.estimated
 
 
+m8 <- gam(nonacc ~ s(meanpm10) + s(meantemp), data = mort, family = quasipoisson)
+zz <- plot(m8, select = 1, ylab = "Log RR")
+
+plot(m8, select = 1, trans = exp, ylab = "Risk Ratio", shade = T, shift = -min(zz[[1]]$fit))
+abline(h = 1, lty = 3)
+```
 
 # Thank you for your time
 
