@@ -1,0 +1,174 @@
+---
+title: "Generalized Additive Model(GAM)"
+author: "Jinseob Kim"
+date: "2022-09-25"
+format:
+  revealjs: 
+    theme: default
+    logo: zarathu_eng.png
+    footer: "www.zarathu.com"
+    self-contained: false
+    chalkboard: 
+      buttons: false
+    preview-links: true
+    show-notes: false
+    slide-number: false
+    width: 1600
+    height: 900
+editor: visual
+subtitle: "Zarathu Co.,Ltd"
+execute:
+  echo: true
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+## Executive summary
+
+GAM 은 비선형관계를 다루는 통계방법이다
+
+-   LOWESS: 구간 촘촘하게 나눈 후 평균값
+-   Cubic spline(cs): 구간 몇개로 나눈 후 각각 3차함수 fitting
+-   Natural cubic spline(ns): cs 맨 처음과 끝구간만 선형 fitting
+-   Smoothing spline(GAM default): 최적화때 smoothing penalty($\lambda$) 부여
+
+종속변수 형태따라 여러종류
+
+-   Continuous: **normal**
+-   Binary: **logistic**
+-   Count: **poisson, quasipoisson**(평균 $\neq$ 분산 일 때)
+-   Survival: **coxph**
+
+
+# GAM theory
+
+## Non linear model
+
+\begin{align}
+Y=\beta_0+\beta_1 x_{1}+\beta_2 x_2+\cdots+\epsilon
+\end{align}
+\begin{align}
+Y=\beta_0+ f(x_1)+\beta_2 x_2 \cdots+\epsilon
+\end{align}
+ $f(x_1,x_2)$꼴의 형태도 가능
+
+
+## LOWESS
+
+Locally weighted scatterplot smoothing
+
+- 구간 나눠 regression
+- 각 점마다 그 점을 포함하는 구간 설정 
+- 가까운 점에 weight
+
+<center><img src="https://www.researchgate.net/publication/342187654/figure/fig3/AS:902862171299841@1592270524905/Principles-of-LOWESS-locally-weighted-scatterplot-smoothing-method-for-a-1st-order.png" width="80%"/></center>
+
+
+## LOWESS in ggplot
+
+
+```{r}
+library(ggplot2);library(survival);library(gridExtra)
+dd <- lapply(seq(0.1, 1, by = 0.1), function(span){
+  ggplot(colon, aes(age, nodes)) + geom_point() + geom_smooth(method  = "loess", span = span) + ggtitle(paste0("Span =", span))
+})
+
+cowplot::plot_grid(plotlist = dd, nrow = 2)
+
+
+```
+
+
+## Cubic spline
+
+Cubic = 3차방정식
+
+- 구간을 몇 개로 나누고: **knot**
+- 각각을 3차함수로 fitting
+- 구간 사이 부드럽게 연결되도록 제한조건
+
+
+<center><a href="https://www.nature.com/articles/s41409-019-0679-x/figures/1"><img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41409-019-0679-x/MediaObjects/41409_2019_679_Fig1_HTML.png" width="60%"/></a></center>
+
+
+## Natural cubic spline(ns)
+
+Cubic + 처음과 끝은 Linear
+
+- 처음보다 더 처음, 끝보다 더 끝(데이터에 없는 숫자)에 대한 보수적인 추정.
+- 3차보다 1차가 변화량 적음.
+
+
+## Cubic spline in R
+
+```{r}
+library(splines)
+cs1 <- glm(time ~ bs(age, knots = c(40, 50, 60, 70)) + sex, data = colon)
+cs2 <- glm(time ~ bs(age, df = 4) + sex, data = colon)
+ns1 <- glm(time ~ ns(age, knots = c(40, 50, 60, 70)) + sex, data = colon)
+ns2 <- glm(time ~ ns(age, df = 4) + sex, data = colon)
+
+age.grid <- seq(min(colon$age), max(colon$age), by = 1)
+with(colon, plot(age,time,col="grey",xlab="Age",ylab="Time"))
+points(age.grid, predict(cs1, newdata = data.frame(age=age.grid, sex = 1)), col=1, lwd=1, type="l")
+points(age.grid, predict(cs2, newdata = data.frame(age=age.grid, sex = 1)), col=2, lwd=2, type="l")
+points(age.grid, predict(ns1, newdata = data.frame(age=age.grid, sex = 1)), col=3, lwd=3, type="l")
+points(age.grid, predict(ns2, newdata = data.frame(age=age.grid, sex = 1)), col=4, lwd=4, type="l")
+#adding cutpoints
+abline(v = c(40, 50, 60, 70), lty=2, col="black")
+legend("topleft", c("cs:knots" ,"cs:df", "ns:knots", "ns:df"), col = 1:4, lwd = 1:4)
+```
+
+
+## Smoothing spline
+
+GAM default
+
+
+
+
+
+# Practice
+
+## Linear
+```{r}
+library(mgcv)
+```
+
+
+## Logistic
+
+## Poisson
+```{r}
+
+```
+
+
+
+## Coxph
+
+```{r}
+library(survival)
+gam.surv <-  gam(time ~ s(age) + sex + s(nodes) + perfor + rx+ obstruct, family=cox.ph(), data= colon, weights = status)
+
+plot(gam.surv, pages = 1)  ## all terms
+```
+
+## Coxph 2
+
+```{r}
+plot(gam.surv, select = 2, ylab = "Log HR") ## select terms
+
+plot(gam.surv, select = 2, trans = exp, ylab = "Hazard ratio", col = "red", shade = T, shade.col = "gray90")
+```
+
+
+
+
+
+# Thank you for your time
+
+::: notes
+If anyone has questions I'll be happy to answer them.
+:::
