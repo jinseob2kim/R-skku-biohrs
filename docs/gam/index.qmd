@@ -64,13 +64,11 @@ Locally weighted scatterplot smoothing
 
 ```{r}
 library(ggplot2);library(survival);library(gridExtra)
-dd <- lapply(seq(0.1, 1, by = 0.1), function(span){
+dd <- lapply(seq(0.1, 0.8, by = 0.2), function(span){
   ggplot(colon, aes(age, nodes)) + geom_point() + geom_smooth(method  = "loess", span = span) + ggtitle(paste0("Span =", span))
 })
 
 cowplot::plot_grid(plotlist = dd, nrow = 2)
-
-
 ```
 
 ## Cubic spline
@@ -81,7 +79,7 @@ Cubic = 3차방정식
 -   각각을 3차함수로 fitting
 -   구간 사이 부드럽게 연결되도록 제한조건
 
-<center><a href="https://www.nature.com/articles/s41409-019-0679-x/figures/1"><img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41409-019-0679-x/MediaObjects/41409_2019_679_Fig1_HTML.png" width="60%"/></a></center>
+<center><a href="https://www.nature.com/articles/s41409-019-0679-x/figures/1"><img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41409-019-0679-x/MediaObjects/41409_2019_679_Fig1_HTML.png" width="48%"/></a></center>
 
 ## Natural cubic spline(ns)
 
@@ -135,7 +133,7 @@ Smoothing(penalized) spline
 
 ## $\lambda$
 
-<center><img src="smoothing.png" width="100%"/></center>
+<center><img src="smoothing.png" width="70%"/></center>
 
 ## Show gam result
 
