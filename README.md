@@ -40,7 +40,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |4|   9월 20일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/), [code](code/datatable.R)  |
 |5|  9월 27일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
 |6|  10월 4일| R 데이터 시각화: [강의록](https://blog.zarathu.com/posts/2022-03-25-graph/), [code](code/plot/), [ggplot2 참고자료](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
-|7|  10월 11일| 기초통계이론: [확률(Probability) vs 가능도(Likelihood)](https://rpubs.com/Statdoc/204928), [슬라이드](https://kunhee1208.github.io/lecture/lecture), [정규분포](https://rpubs.com/Statdoc/204929)|
+|7|  10월 11일| 기초통계이론: 확률(Probability) vs 가능도(Likelihood)([강의록](https://rpubs.com/Statdoc/204928), [슬라이드](https://kunhee1208.github.io/lecture/lecture)), 정규분포([강의록](https://rpubs.com/Statdoc/204929), [슬라이드]())|
 |8|  10월 18일| 중간고사 |
 |9|  10월 25일| R 통계(1): [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2020-07-08-table1inmed/), [code](code/descriptive.R), [tableone 소개](https://blog.zarathu.com/posts/2022-02-07-tableone/),  [gtsummary 소개](https://blog.zarathu.com/posts/2022-02-07-gtsummary/) |
 |10|  11월 1일| R 통계(2): [회귀분석, 생존분석](https://blog.zarathu.com/posts/2020-07-22-regressionbasic/), [생존분석 추가자료](https://blog.zarathu.com/posts/2020-10-29-survivalpractice/), [리뷰어 위한 의학통계](https://jinseob2kim.github.io/lecture-general/statreview/#59)  |
