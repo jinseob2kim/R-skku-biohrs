@@ -129,7 +129,7 @@ Smoothing(penalized) spline
 ```
 -   $\lambda\rightarrow 0$: 울퉁불퉁.
 -   $\lambda$가 커질수록 smoothing
-- $f''$ 는 기울기의 변화율, 제곱하면 절대값 의미
+-   $f''$ 는 기울기의 변화율, 제곱하면 절대값 의미
 
 ## $\lambda$
 
@@ -137,7 +137,7 @@ Smoothing(penalized) spline
 
 ## Show gam result
 
-- edf(Effective df): 자유도 - shrinkage penalty 
+-   edf(Effective df): 자유도 - shrinkage penalty
 
 ```{r}
 library(mgcv)
@@ -159,13 +159,21 @@ plot(m1, shade = T)   ## plot(m1, select = 1)
 
 Smoothing spline: basis function 들의 합
 
+$$s(x) = \sum_{k = 1}^K \beta_k b_k(x)$$
+
+<center><a href="https://geomoer.github.io/moer-bsc-project-seminar-SDM/unit99/student_tutorials-02b_GAM_Meyer.html"><img src="basis.gif" width="60%"/></a></center>
+
+[출처](https://geomoer.github.io/moer-bsc-project-seminar-SDM/unit99/student_tutorials-02b_GAM_Meyer.html)
+
+## Basis function: value
+
 ```{r}
 model_matrix <- predict(m1, type = "lpmatrix", newdata = data.frame(age = sort(colon$age), sex = 1))
 
 DT::datatable(round(model_matrix, 2), rownames = F, options = list(scrollX = T,scrollCollapse = T))
 ```
 
-## Basis function(2)
+## Basis function: plot
 
 9개의 basis function
 
@@ -212,22 +220,17 @@ m4 <- gam(time ~ s(age, sp = 1000) + sex, data = colon)
 plot(m4)
 ```
 
-
-
-
 # Other distribution
 
 ## Logistic
 
 `family = binomial`
 
-- 해석에 주의: **log Odds**  
-- **exponential** transformation, **reference(OR =1) 설정** 필요
+-   해석에 주의: **log Odds**\
+-   **exponential** transformation, **reference(OR =1) 설정** 필요
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="50%"}
-
 ```{r}
 m5 <- gam(status ~ s(age) + sex, data = colon, family = binomial)
 zz <- plot(m5, ylab = "Log Odds")
@@ -235,25 +238,19 @@ zz <- plot(m5, ylab = "Log Odds")
 :::
 
 ::: {.column width="50%"}
-
 ```{r}
 plot(m5, trans = exp, ylab = "Odds Ratio", shade = T, shift = -min(zz[[1]]$fit))
 abline(h = 1, lty = 3)
 ```
 :::
-
-::::
-
+:::
 
 ## Coxph
 
-`family = cox.ph`
-- `weights = status`
+`family = cox.ph` - `weights = status`
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="50%"}
-
 ```{r}
 m6 <-  gam(time ~ s(age) + sex + s(nodes), family=cox.ph, data= colon, weights = status)
 zz <- plot(m6, select = 1, ylab = "Log Hazard")
@@ -261,24 +258,19 @@ zz <- plot(m6, select = 1, ylab = "Log Hazard")
 :::
 
 ::: {.column width="50%"}
-
 ```{r}
 plot(m6, select = 1, trans = exp, ylab = "Hazard Ratio", shade = T, shift = -min(zz[[1]]$fit))
 abline(h = 1, lty = 3)
 ```
 :::
-
-::::
-
+:::
 
 ## Poisson
 
-`family = poisson`
-- exp trans
+`family = poisson` - exp trans
 
-:::: {.columns}
+::: columns
 ::: {.column width="50%"}
-
 ```{r}
 mort <- read.csv("https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/docs/gam/mort.csv")
 m7 <- gam(nonacc ~ s(meanpm10) + s(meantemp), data = mort, family = poisson)
@@ -287,33 +279,28 @@ zz <- plot(m7, select = 1, ylab = "Log RR")
 :::
 
 ::: {.column width="50%"}
-
 ```{r}
 plot(m7, select = 1, trans = exp, ylab = "Risk Ratio", shade = T, shift = -min(zz[[1]]$fit))
 abline(h = 1, lty = 3)
 ```
 :::
-
-::::
-
-
+:::
 
 ## Quasi-poisson
 
 Poisson 분포의 가정 `평균=분산` 이 만족하지 않을 때.
 
-- `family = quasipoisson`
-- $평균 = \phi * 분산$ 
-- 곡선 자체는 그대로, 신뢰구간만 넓어짐(보수적 추정)
+-   `family = quasipoisson`
+-   $평균 = \phi * 분산$
+-   곡선 자체는 그대로, 신뢰구간만 넓어짐(보수적 추정)
 
 ```{r}
 c(mean(mort$nonacc), var(mort$nonacc))
 m7$scale.estimated
 ```
-:::: {.columns}
 
+::: columns
 ::: {.column width="50%"}
-
 ```{r}
 m8 <- gam(nonacc ~ s(meanpm10) + s(meantemp), data = mort, family = quasipoisson)
 zz <- plot(m8, select = 1, ylab = "Log RR")
@@ -326,9 +313,6 @@ plot(m8, select = 1, trans = exp, ylab = "Risk Ratio", shade = T, shift = -min(z
 abline(h = 1, lty = 3)
 ```
 :::
-
-::::
-
+:::
 
 # Thank you for your time
-
