@@ -63,7 +63,7 @@ Locally weighted scatterplot smoothing
 ## LOWESS in ggplot
 
 ```{r}
-library(ggplot2);library(survival);library(gridExtra)
+library(ggplot2);library(survival)
 dd <- lapply(seq(0.1, 0.8, by = 0.2), function(span){
   ggplot(colon, aes(age, nodes)) + geom_point() + geom_smooth(method  = "loess", span = span) + ggtitle(paste0("Span =", span))
 })
