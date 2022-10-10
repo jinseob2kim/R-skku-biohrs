@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.179">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="이건희 조교">
+
+<title>SKKU BIOHRS-MIDTERM Review</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-url-아래-url을-불러와-문제를-해결하시오." id="toc-data-url-아래-url을-불러와-문제를-해결하시오." class="nav-link active" data-scroll-target="#data-url-아래-url을-불러와-문제를-해결하시오.">data URL: 아래 url을 불러와 문제를 해결하시오.</a></li>
+  <li><a href="#r코드와-실행결과를-모두-아래-메일로-보내주십시오." id="toc-r코드와-실행결과를-모두-아래-메일로-보내주십시오." class="nav-link" data-scroll-target="#r코드와-실행결과를-모두-아래-메일로-보내주십시오.">R코드와 실행결과를 모두 아래 메일로 보내주십시오.</a></li>
+  <li><a href="#필요한-library-및-데이터-불러오기" id="toc-필요한-library-및-데이터-불러오기" class="nav-link" data-scroll-target="#필요한-library-및-데이터-불러오기">필요한 library 및 데이터 불러오기</a></li>
+  <li><a href="#q1.-q_-로-시작하는-변수는-범주형factor으로-나머지-변수는-숫자형integer으로-만드시오." id="toc-q1.-q_-로-시작하는-변수는-범주형factor으로-나머지-변수는-숫자형integer으로-만드시오." class="nav-link" data-scroll-target="#q1.-q_-로-시작하는-변수는-범주형factor으로-나머지-변수는-숫자형integer으로-만드시오.">Q1. “Q_” 로 시작하는 변수는 범주형(factor)으로, 나머지 변수는 숫자형(integer)으로 만드시오.</a></li>
+  <li><a href="#q2.-연속-변수-wstc와-bmi의-연도별-평균-및-표준편차를-구하시오." id="toc-q2.-연속-변수-wstc와-bmi의-연도별-평균-및-표준편차를-구하시오." class="nav-link" data-scroll-target="#q2.-연속-변수-wstc와-bmi의-연도별-평균-및-표준편차를-구하시오.">Q2. 연속 변수 “WSTC”와 “BMI”의 연도별 평균 및 표준편차를 구하시오.</a></li>
+  <li><a href="#q3.-연도별-fbs를-나타내는-boxplot을-그리고-pptx로-저장하시오.-x축-exmd_bz_yyyy-y축-fbs" id="toc-q3.-연도별-fbs를-나타내는-boxplot을-그리고-pptx로-저장하시오.-x축-exmd_bz_yyyy-y축-fbs" class="nav-link" data-scroll-target="#q3.-연도별-fbs를-나타내는-boxplot을-그리고-pptx로-저장하시오.-x축-exmd_bz_yyyy-y축-fbs">Q3. 연도별 “FBS”를 나타내는 Boxplot을 그리고 pptx로 저장하시오. (x축: “EXMD_BZ_YYYY”, y축: “FBS”)</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">SKKU BIOHRS-MIDTERM Review</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>이건희 조교 </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="data-url-아래-url을-불러와-문제를-해결하시오." class="level2">
+<h2 class="anchored" data-anchor-id="data-url-아래-url을-불러와-문제를-해결하시오.">data URL: 아래 url을 불러와 문제를 해결하시오.</h2>
+<p>“https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/example_g1e.csv”</p>
+</section>
+<section id="r코드와-실행결과를-모두-아래-메일로-보내주십시오." class="level2">
+<h2 class="anchored" data-anchor-id="r코드와-실행결과를-모두-아래-메일로-보내주십시오.">R코드와 실행결과를 모두 아래 메일로 보내주십시오.</h2>
+<ul>
+<li>lisalee1208@naver.com</li>
+<li>jinseob2kim@gmail.com</li>
+</ul>
+</section>
+<section id="필요한-library-및-데이터-불러오기" class="level2">
+<h2 class="anchored" data-anchor-id="필요한-library-및-데이터-불러오기">필요한 library 및 데이터 불러오기</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table);<span class="fu">library</span>(magrittr);<span class="fu">library</span>(ggpubr);<span class="fu">library</span>(rvg);<span class="fu">library</span>(officer) </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">"https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/example_g1e.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   EXMD_BZ_YYYY RN_INDI HME_YYYYMM Q_PHX_DX_STK Q_PHX_DX_HTDZ Q_PHX_DX_HTN
+1:         2009  562083     200909            0             0            1
+2:         2009  334536     200911            0             0            0
+3:         2009  911867     200903            0             0            0
+4:         2009  183321     200908           NA            NA           NA
+5:         2009  942671     200909           NA            NA           NA
+6:         2009  979358     200912           NA            NA           NA
+   Q_PHX_DX_DM Q_PHX_DX_DLD Q_PHX_DX_PTB Q_HBV_AG Q_SMK_YN Q_DRK_FRQ_V09N HGHT
+1:           0            0           NA        3        1              0  144
+2:           0            0           NA        2        1              0  162
+3:           0            0           NA        3        1              0  163
+4:          NA           NA           NA        3        1              0  152
+5:          NA           NA           NA        3        1              0  159
+6:          NA           NA           NA        2        1              0  157
+   WGHT WSTC  BMI VA_LT VA_RT BP_SYS BP_DIA URN_PROT  HGB FBS TOT_CHOL  TG HDL
+1:   61   90 29.4   0.7   0.8    120     80        1 12.6 117      264 128  60
+2:   51   63 19.4   0.8   1.0    120     80        1 13.8  96      169  92  70
+3:   65   82 24.5   0.7   0.6    130     80        1 15.0 118      216 132  55
+4:   51   70 22.1   0.8   0.9    101     62        1 13.1  90      199 100  65
+5:   50   73 19.8   0.7   0.8    132     78        1 13.0  92      162  58  40
+6:   55   73 22.3   1.5   1.5    110     70        1 11.9 100      192 109  53
+   LDL CRTN SGOT SGPT GGT GFR
+1: 179  0.9   25   20  25  59
+2:  80  0.9   18   15  28  74
+3: 134  0.8   26   30  30  79
+4: 114  0.9   18   14  11  61
+5: 111  0.9   24   23  15  49
+6: 117  0.7   15   12  14  83</code></pre>
+</div>
+</div>
+</section>
+<section id="q1.-q_-로-시작하는-변수는-범주형factor으로-나머지-변수는-숫자형integer으로-만드시오." class="level2">
+<h2 class="anchored" data-anchor-id="q1.-q_-로-시작하는-변수는-범주형factor으로-나머지-변수는-숫자형integer으로-만드시오.">Q1. “Q_” 로 시작하는 변수는 범주형(factor)으로, 나머지 변수는 숫자형(integer)으로 만드시오.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># "Q_"로 시작하는 변수 추출하는 두 가지 방법 </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>var.factor <span class="ot">&lt;-</span> <span class="fu">names</span>(a)[<span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">12</span>)]  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>var.factor <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"Q_"</span>, <span class="fu">names</span>(a), <span class="at">value =</span> T)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>var.factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Q_PHX_DX_STK"   "Q_PHX_DX_HTDZ"  "Q_PHX_DX_HTN"   "Q_PHX_DX_DM"   
+[5] "Q_PHX_DX_DLD"   "Q_PHX_DX_PTB"   "Q_HBV_AG"       "Q_SMK_YN"      
+[9] "Q_DRK_FRQ_V09N"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 위에서 추출한 변수를 제외한 나머지 변수 추출하는 두 가지 방법 </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>var.conti <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(a), var.factor)    </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>var.conti <span class="ot">&lt;-</span> <span class="fu">names</span>(a)[<span class="sc">!</span>(<span class="fu">names</span>(a) <span class="sc">%in%</span> var.factor)]     <span class="co"># ! = 'not', %in% = 'including'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>var.conti</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "EXMD_BZ_YYYY" "RN_INDI"      "HME_YYYYMM"   "HGHT"         "WGHT"        
+ [6] "WSTC"         "BMI"          "VA_LT"        "VA_RT"        "BP_SYS"      
+[11] "BP_DIA"       "URN_PROT"     "HGB"          "FBS"          "TOT_CHOL"    
+[16] "TG"           "HDL"          "LDL"          "CRTN"         "SGOT"        
+[21] "SGPT"         "GGT"          "GFR"         </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 각각 범주형과 숫자형 변수로 class 설정하는 두 가지 방법</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> var.factor){              <span class="co"># for 반복문 : as.factor() 함수 사용 </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  a[[v]] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(a[[v]])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> var.conti){               <span class="co"># for 반복문 : as.numeric() 함수 사용</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  a[[v]] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(a[[v]])</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>a[, (var.factor) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, as.factor), .SD <span class="ot">=</span> var.factor]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>a[, (var.conti) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, as.numeric), .SD <span class="ot">=</span> var.conti]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># class 잘 변환되었는지 확인하는 방법</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 답안 제출 시에는 작성할 필요 없음. </span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(a, class)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  EXMD_BZ_YYYY        RN_INDI     HME_YYYYMM   Q_PHX_DX_STK  Q_PHX_DX_HTDZ 
+     "numeric"      "numeric"      "numeric"       "factor"       "factor" 
+  Q_PHX_DX_HTN    Q_PHX_DX_DM   Q_PHX_DX_DLD   Q_PHX_DX_PTB       Q_HBV_AG 
+      "factor"       "factor"       "factor"       "factor"       "factor" 
+      Q_SMK_YN Q_DRK_FRQ_V09N           HGHT           WGHT           WSTC 
+      "factor"       "factor"      "numeric"      "numeric"      "numeric" 
+           BMI          VA_LT          VA_RT         BP_SYS         BP_DIA 
+     "numeric"      "numeric"      "numeric"      "numeric"      "numeric" 
+      URN_PROT            HGB            FBS       TOT_CHOL             TG 
+     "numeric"      "numeric"      "numeric"      "numeric"      "numeric" 
+           HDL            LDL           CRTN           SGOT           SGPT 
+     "numeric"      "numeric"      "numeric"      "numeric"      "numeric" 
+           GGT            GFR 
+     "numeric"      "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="q2.-연속-변수-wstc와-bmi의-연도별-평균-및-표준편차를-구하시오." class="level2">
+<h2 class="anchored" data-anchor-id="q2.-연속-변수-wstc와-bmi의-연도별-평균-및-표준편차를-구하시오.">Q2. 연속 변수 “WSTC”와 “BMI”의 연도별 평균 및 표준편차를 구하시오.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aggregate() 함수 : 데이터의 특정 변수를 기준으로 통계량을 구해주는 함수</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># aggregate(data, '기준이 되는 변수', 함수)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(a[,<span class="fu">c</span>(<span class="st">"WSTC"</span>,<span class="st">"BMI"</span>)], <span class="fu">list</span>(a<span class="sc">$</span>EXMD_BZ_YYYY), mean)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(a[,<span class="fu">c</span>(<span class="st">"WSTC"</span>,<span class="st">"BMI"</span>)], <span class="fu">list</span>(a<span class="sc">$</span>EXMD_BZ_YYYY), sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(a[,<span class="fu">c</span>(<span class="st">"WSTC"</span>,<span class="st">"BMI"</span>)], <span class="fu">list</span>(a<span class="sc">$</span>EXMD_BZ_YYYY), mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Group.1     WSTC      BMI
+1    2009 79.55607 23.76402
+2    2010 80.84746 23.82712
+3    2011 80.61883 23.96009
+4    2012 80.91453 24.08932
+5    2013 80.84774 23.75391
+6    2014 80.71260 23.78031
+7    2015 81.20417 24.28167</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(a[,<span class="fu">c</span>(<span class="st">"WSTC"</span>,<span class="st">"BMI"</span>)], <span class="fu">list</span>(a<span class="sc">$</span>EXMD_BZ_YYYY), sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Group.1     WSTC      BMI
+1    2009 9.528023 3.392946
+2    2010 9.528124 3.274275
+3    2011 9.167756 3.456105
+4    2012 9.627904 3.338900
+5    2013 9.564778 3.329659
+6    2014 9.473913 3.323959
+7    2015 9.939776 3.544363</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(WSTC, BMI) <span class="sc">~</span> EXMD_BZ_YYYY, <span class="at">data =</span> a, <span class="cf">function</span>(x){<span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x))})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(WSTC, BMI) <span class="sc">~</span> EXMD_BZ_YYYY, <span class="at">data =</span> a, <span class="cf">function</span>(x){<span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x))})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  EXMD_BZ_YYYY WSTC.mean   WSTC.sd  BMI.mean    BMI.sd
+1         2009 79.556075  9.528023 23.764019  3.392946
+2         2010 80.847458  9.528124 23.827119  3.274275
+3         2011 80.618834  9.167756 23.960090  3.456105
+4         2012 80.914530  9.627904 24.089316  3.338900
+5         2013 80.847737  9.564778 23.753909  3.329659
+6         2014 80.712598  9.473913 23.780315  3.323959
+7         2015 81.204167  9.939776 24.281667  3.544363</code></pre>
+</div>
+</div>
+</section>
+<section id="q3.-연도별-fbs를-나타내는-boxplot을-그리고-pptx로-저장하시오.-x축-exmd_bz_yyyy-y축-fbs" class="level2">
+<h2 class="anchored" data-anchor-id="q3.-연도별-fbs를-나타내는-boxplot을-그리고-pptx로-저장하시오.-x축-exmd_bz_yyyy-y축-fbs">Q3. 연도별 “FBS”를 나타내는 Boxplot을 그리고 pptx로 저장하시오. (x축: “EXMD_BZ_YYYY”, y축: “FBS”)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot 그리기 </span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggboxplot</span>(<span class="at">data=</span> a, <span class="at">x=</span> <span class="st">"EXMD_BZ_YYYY"</span>, <span class="at">y=</span> <span class="st">"FBS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggboxplot</span>(<span class="at">data=</span> a, <span class="at">x=</span> <span class="st">"EXMD_BZ_YYYY"</span>, <span class="at">y=</span> <span class="st">"FBS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pptx로 저장하기</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>plot_file <span class="ot">&lt;-</span> <span class="fu">read_pptx</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_slide</span>() <span class="sc">%&gt;%</span> <span class="fu">ph_with</span>(<span class="fu">dml</span>(<span class="at">ggobj =</span> p), <span class="at">location =</span> <span class="fu">ph_location_type</span>(<span class="at">type=</span><span class="st">"body"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot_file, <span class="at">target =</span> <span class="st">"plot_file.pptx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

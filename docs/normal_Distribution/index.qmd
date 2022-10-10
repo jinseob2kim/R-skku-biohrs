@@ -1,0 +1,411 @@
+---
+title: "정규분포(Normal Distribution)"
+author: "김진섭 (Thanks to 이건희조교)"
+format:
+  revealjs: 
+    theme: default
+    logo: "zarathu_eng.png"
+    footer: "www.zarathu.com"
+    self-contained: false
+    chalkboard: 
+      buttons: false
+    preview-links: true
+    show-notes: false
+    slide-number: false
+    width: 1600
+    height: 900
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## HEADLINE
+
+<center>
+
+**정규분포의 위대함**
+
+> by **이항분포**
+
+> by **오차의 법칙**
+
+> by **중심극한정리**
+
+> 시행 횟수/표본 개수 $n$이 커질수록 **표본평균** $\bar{X}$는 $N(\mu,\frac{\sigma^2}{n})$을 따른다.
+
+</center>
+
+## Contents
+
+1)  Intro
+
+2)  이항분포의 근사
+
+3)  오차의 법칙: 오차라면 마땅히 가지고 있어야 할 조건
+
+4)  중심극한정리: 모양이 일그러진 동전 / 주사위 던지기
+
+5)  중심극한정리: 표준정규분포 / 카이제곱분포
+
+6)  중심극한정리 고찰
+
+7)  Conclusion
+
+## 목표
+
+- **정규분포(Normal distribution)**의 위대함과 당위성 이해
+
+- 연속변수는 대부분 정규분포를 가정
+
+- 실제로 키, 몸무게, 시험 점수 등 대다수의 측정값은 정규분포
+
+- Why?
+
+- **이항분포의 근사, 오차의 법칙, 중심극한정리** 
+
+
+## 이항분포(Binomial Distribution)
+
+-   **이항분포** $B(n,p)$ : 확률 $p$인 사건을 $n$번 시행 시 각 사건들 확률분포
+-   **평균:** $np$, 분산: $np(1-p)$
+-   이항분포가 삶의 대부분(선거, 타율, 객관식시험..)
+-   정규분포가 이항분포의 근사값으로 표현된다면?
+
+## 이항분포 근사: 동전을 무한히 던지면?
+
+```{r,echo=F,fig.cap=" 이항분포 VS 정규분포: 동전 던지기",fig.width=12,fig.height=8,warning=F}
+library(ggplot2);library(gridExtra)
+coin_plot=function(n=10,xl=c(0,10)){
+  bin=1:n
+  coinplot=ggplot(data.frame(bin,p=dbinom(bin,max(bin),0.5)),aes(bin,p))+geom_bar(stat = "identity",width=0.7)+xlab("앞면 횟수")+ylab("확률")+ggtitle(paste("동전 ",max(bin),"번 던지기",sep=""))+xlim(xl)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+  return(coinplot)
+}
+
+z=seq(450,550)
+nplot=ggplot(data.frame(z,p=dnorm(z,mean=500,sd=sqrt(250))),aes(z,p))+geom_line()+ggtitle(expression(paste("정규분포: ",italic(N)(500,250),sep="")))+xlab(expression(z))+ylab("Density")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(coin_plot(100,xl=c(30,70)),coin_plot(500,xl=c(215,285)),coin_plot(1000,xl=c(450,550)),nplot, ncol=2)
+
+```
+
+
+
+$B(1000,\frac{1}{2}) \simeq N(1000\times \frac{1}{2}, 1000\times \frac{1}{2} \times \frac{1}{2})$
+
+
+## 이항분포의 근사: 주사위를 무한히 던지면?
+
+```{r,echo=F,fig.cap=" 이항분포 VS 정규분포: 주사위 던지기",fig.width=12,fig.height=8,warning=F}
+ju_plot=function(n=10,xl=c(0,10)){
+  bin=1:n
+  coinplot=ggplot(data.frame(bin,p=dbinom(bin,max(bin),1/6)),aes(bin,p))+geom_bar(stat = "identity",width=0.7)+xlab("1이 나온 횟수")+ylab("확률")+ggtitle(paste("주사위 ",max(bin),"번 던지기",sep=""))+xlim(xl)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+  return(coinplot)
+}
+
+ju_plot2=function(n=10,xl=c(0,10)){
+  bin=1:n
+  coinplot=ggplot(data.frame(bin,p=dbinom(bin,max(bin),1/6)),aes(bin,p))+geom_bar(stat = "identity",width=0.7)+xlab("1이 나온 횟수")+ylab("확률")+ggtitle(paste("주사위 ",max(bin),"번 던지기",sep=""))+xlim(xl)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))+scale_x_continuous(breaks=c(0,2,4,6,8,10))
+  return(coinplot)
+}
+
+z=seq(60,140)
+jnplot=ggplot(data.frame(z,p=dnorm(z,mean=100,sd=sqrt(250/3))),aes(z,p))+geom_line()+ggtitle(expression(paste("정규분포: ",italic(N)(100,83.3),sep="")))+xlab(expression(z))+ylab("Density")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(ju_plot2(10,xl=c(0,10)),ju_plot(60,xl=c(0,20)),ju_plot(600,xl=c(60,140)),jnplot, ncol=2)
+
+```
+
+
+
+$B(600,\frac{1}{6}) \simeq N(600\times \frac{1}{6}, 600\times \frac{1}{6} \times \frac{5}{6})$
+
+
+## 이항분포 근사: 일반화
+
+- 동전과 주사위 예시
+
+    - $B(1000,\frac{1}{2}) \simeq N(1000\times \frac{1}{2}, 1000\times \frac{1}{2} \times \frac{1}{2})$
+    - $B(600,\frac{1}{6}) \simeq N(600\times \frac{1}{6}, 600\times \frac{1}{6} \times \frac{5}{6})$
+
+- 일반화, $n$이 커질수록
+
+    - $B(n,\frac{1}{2}) \simeq N(n \times \frac{1}{2}, n \times \frac{1}{2} \times \frac{1}{2})$
+    - $B(n,\frac{1}{6}) \simeq N(n \times \frac{1}{6}, n \times \frac{1}{6} \times \frac{5}{6})$
+
+- 종합
+
+    - **시행횟수** $n$이 커질수록 $B(n,p) \simeq N(np, np(1-p))$
+    - 정규분포가 이항분포의 근사로 설명, 이상분포의 지위를 물려받는다.
+
+## 오차의 법칙: 오차라면 마땅히 이래야
+
+수학자 Gauss는 **오차에 대한 고찰**만으로 정규분포를 유도.
+
+- 1. +오차와 -오차가 나올 가능성 같다: $f(-\epsilon)=f(\epsilon)$인 좌우대칭 함수
+
+- 2. 작은 오차가 흔하고 큰 오차는 드물다: $f(\epsilon)$는 위로 볼록한 모양
+
+- 3. $f(\epsilon)$는 부드러운 모양(2번 미분가능)이고 확률의 합은 1: $\int_{-\infty}^{\infty} f(\epsilon) d\epsilon=1$
+
+- **4. 오차의 참값일 가능성이 가장 높은(MLE) 값은 측정한 오차들의 평균**
+            
+-\> 측정값이 각각 $\epsilon_1, \epsilon_2, \cdots, \epsilon_n$일 때 가능도 $L=f(\epsilon_1 - \epsilon)f(\epsilon_2 - \epsilon)\dots f(\epsilon_n - \epsilon)$는  $\epsilon=\frac{\epsilon_1+\epsilon_2+\cdots+\epsilon_n}{n}$에서 최대
+
+
+정말 간단한 4개 조건만으로 정규분포 PDF를 수학적으로 유도. 
+
+- 정규분포가 대부분일 것이다
+
+
+## 중심극한정리: 무조건 정규분포 OK?
+
+- 평균은 가장 흔히 쓰이는 지표.
+- 표본을 뽑아 **표본평균(Sample mean)** 구하여 전체 평균으로 간주
+- 믿음의 정도로 표준오차(Standard error, 표본평균들의 표준편차) 이용
+- 수백, 수천 명의 여론조사를 민심의 척도로 간주해도 되나?
+
+
+## 예: 일그러진 동전 $p = 0.4$
+
+- 행위 1: **10번 던져** 앞면 나올 확률 $\hat{p}$ 계산
+- 행위 1 을 10000번 수행하여 $\hat{p}$ 의 분포 확인, **행위 2은 30번, 행위 3은 100번 던지기**
+
+
+::: columns
+::: {.column width="50%"}
+```{r,fig.width=10,fig.height=7,warning=F,echo=F}
+sample_mean=function(n=10){
+  x=rbinom(n,1,0.4)
+  return(mean(x))
+}
+
+
+f1=data.frame(n=c("앞면","뒷면"),p=c(0.4,0.6))
+g1=ggplot(f1,aes(n,p))+geom_bar(stat = "identity",width=0.3) +ylab("확률")+ggtitle("일그러진 동전의 확률분포")+annotate("text",  x=Inf, y = Inf, label ="평균: 0.4\n분산: 0.24", vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+
+xl=c(0,0.8)
+mean_vec=sapply(1:10000,function(x){sample_mean(10)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),4),sep="")
+g2=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=20)+xlim(xl)+xlab("표본평균")+ggtitle("10번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(30)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),4),sep="")
+g3=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=40)+xlim(xl)+xlab("표본평균")+ggtitle("30번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(100)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),4),sep="")
+g4=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=90)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("100번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(g1,g2,g3,g4)
+```
+:::
+
+::: {.column width="50%"}
+1.  $n$ 커질수록 $\hat{p}$ 이 정규분포에 가까워짐
+2.  $\hat{p}$의 평균이 실제 $p$값인 0.4에 가까워짐
+3.  $\hat{p}$의 분산이 $\frac{0.24}{n}=\frac{p(1-p)}{n}$에 가까워짐
+
+따라서 $n$이 커지면 $\hat{p}$ 는 $N(p,\frac{p(1-p)}{n})$ 을 따른다
+:::
+:::
+
+## 주사위 던지기
+
+- 주사위눈 **평균(**$\mu$): $\frac{1+2+3+4+5+6}{6}=3.5$, **분산(**$\sigma^2$): $\frac{(1-3.5)^2+(2-3.5)^2+\cdots+(6-3.5)^2}{6}\approx 2.92$
+- 행위 1: **10번 던져** 평균 $\bar{x}$ 구하는 작업을 10000번 반복. 행위2, 3은 앞과 동일
+
+::: columns
+::: {.column width="50%"}
+```{r,fig.width=10,fig.height=7,warning=F,echo=F}
+sample_mean=function(n=10){
+  x=sample(1:6,n,replace=T)
+  return(mean(x))
+}
+
+f1=data.frame(n=1:6,p=rep(1/6,6))
+g1=ggplot(f1,aes(n,p))+geom_bar(stat = "identity",width=0.7)+xlab("주사위 눈")+ylab("확률")+scale_x_continuous(breaks=1:6)+ylim(0,0.25)+ggtitle("주사위 눈의 확률분포")+annotate("text",  x=Inf, y = Inf, label ="평균: 3.5\n분산: 2.92", vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+xl=c(2,5)
+mean_vec=sapply(1:10000,function(x){sample_mean(10)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g2=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=30)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("10번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(30)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g3=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=45)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("30번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(100)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g4=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=60)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("100번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(g1,g2,g3,g4)
+```
+:::
+
+::: {.column width="50%"}
+1.  $n$이 커지면 표본평균 $\bar{X}$의 분포 $\simeq$ 정규분포
+2.  $\bar{X}$의 평균 $\simeq$ 실제 평균인 $\mu=3.5$
+3.  $\bar{X}$의 분산 $\simeq$ $\frac{2.92}{n}=\frac{\sigma^2}{n}$
+
+$n$이 커지면 $\bar{X}$는 $N(\mu,\frac{\sigma^2}{n})$을 따른다.
+:::
+:::
+
+## 표준정규분포
+
+- 표준 정규분포($\mu=0$, $\sigma^2=1$)에서 $n$개 뽑아 평균내기
+- 세팅은 이전과 동일
+
+::: columns
+::: {.column width="50%"}
+```{r,fig.width=10,fig.height=7,warning=F,echo=F}
+sample_mean=function(n=30){
+  x=rnorm(n)
+  return(mean(x))
+}
+
+z=seq(-4, 4,0.01)
+f3=data.frame(z, p=dnorm(z))
+g1=ggplot(f3,aes(z,p))+geom_line()+xlab("z")+ylab("Density")+ggtitle("표준 정규분포의 확률분포")+annotate("text",  x=Inf, y = Inf, label ="평균: 0\n분산: 1", vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+xl=c(-.75,.75)
+mean_vec=sapply(1:10000,function(x){sample_mean(10)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g2=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=30)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("10번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(30)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g3=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=45)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("30번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(100)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g4=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=80)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("100번 던진 평균들의 분포")+ylab("Density")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(g1,g2,g3,g4)
+```
+:::
+
+::: {.column width="50%"}
+1.  $n$이 커질수록 표본평균 $\bar{X}$ 분포 $\simeq$ 정규분포
+2.  $\bar{X}$의 평균 $\simeq$ 실제평균 0
+3.  $\bar{X}$의 분산 $\simeq$ $\frac{1}{n}$에 가까워졌다.\
+
+**연속확률의 경우에도** $n$이 커지면 $\bar{X}$는 $N(\mu,\frac{\sigma^2}{n})$을 따른다.
+:::
+:::
+
+## 카이제곱분포
+
+- 자유도 1인 카이제곱분포($\mu=1$, $\sigma^2=2$): 왼쪽으로 치우친 분포에서 뽑아도?
+- 세팅은 동일
+
+::: columns
+::: {.column width="50%"}
+```{r,fig.width=10,fig.height=7,warning=F,echo=F}
+sample_mean=function(n=30){
+  x=rchisq(n,df=1)
+  return(mean(x))
+}
+
+z=seq(0.5, 8,0.01)
+f3=data.frame(z, p=dchisq(z,df=1))
+g1=ggplot(f3,aes(z,p))+geom_line()+xlab("z")+ylab("Density")+ggtitle("카이제곱분포(자유도 1) 의 확률분포")+annotate("text",  x=Inf, y = Inf, label ="평균: 1\n분산: 2", vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+xl=c(0,2)
+mean_vec=sapply(1:10000,function(x){sample_mean(10)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g2=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=50)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("10번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(30)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g3=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=100)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("30번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+mean_vec=sapply(1:10000,function(x){sample_mean(100)})
+legends=paste("평균: ",round(mean(mean_vec),2),"\n분산: ",round(var(mean_vec),3),sep="")
+g4=ggplot(data.frame(mean_vec),aes(mean_vec))+geom_histogram(aes(y=..density..),bins=200)+geom_density()+xlim(xl)+xlab("표본평균")+ggtitle("100번 던진 평균들의 분포")+ylab("Density")+annotate("text",  x=Inf, y = Inf, label = legends, vjust=1.5, hjust=1)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))
+
+grid.arrange(g1,g2,g3,g4)
+```
+:::
+
+::: {.column width="50%"}
+1.  $n$이 커질수록 $\bar{X}$의 분포 $\simeq$ 정규분포
+2.  $\bar{X}$의 평균과 분산이 각각 1, $\frac{2}{n}$에 가까워짐
+
+$\bar{X}$는 $n$이 커질수록 $N(\mu,\frac{\sigma^2}{n})$을 따른다.
+
+:::
+:::
+
+> **중심극한정리(Central Limit Theorem, CLT)** : 어떤 모집단이든 30개 정도의 $\bar{X}$가 확보되면 정규분포를 따른다.
+
+
+## 중심극한정리 고찰 - 쪽수가 깡패(?)
+
+$n$ 이 커질수록
+
+- 표본평균의 평균이 모집단 평균에 가까워짐
+- 표준오차(표본평균의 분산) $\frac{\sigma^2}{n}$ 이 0에 가까워짐
+
+> 즉, 표본평균을 실제평균으로 간주해도 됨
+
+
+## 중심극한정리 고찰 - 의심의 정도를 숫자로 표현(p-value)
+
+예: $p = 0.4$ 인 일그러진 동전 여러번 던지기
+
+- 여러번 던져서 계산한 $\hat{p}$의 분포가 $N(0.4,0.024)$에 가까워짐.
+
+- 10번 던져서 앞면 6번($\hat{p}=0.6$) 나왔다면? 6번 이상 나올 확률: 19.7% $\div2$ = 9.85% -\> 그럴 수 있지
+
+- 30번 던져서 앞면 18번($\hat{p}=0.6$) 나왔다면? 18번 이상 나올 확률: 2.5% $\div2$ = 1.25% -\> 이상한데
+
+- 100번 던져서 앞면 60번($\hat{p}=0.6$) 나왔다면? 60번 이상 나올 확률: 0.004% $\div2$ = 0.002% -\> 동전조작!
+
+
+```{r,fig.width=15,fig.height=3,warning=F,echo=F}
+sample_mean=function(n=10){
+  x=rbinom(n,1,0.4)
+  return(mean(x))
+}
+
+z=seq(0,0.8,0.01)
+d10=dnorm(z,mean=0.4,sd=sqrt(0.024))
+d30=dnorm(z,mean=0.4,sd=sqrt(0.008))
+d100=dnorm(z,mean=0.4,sd=sqrt(0.0024))
+pct10=1-2*pnorm(0.2,mean=0.4,sd=sqrt(0.024));pct10=paste(round(100*pct10,1),"%",sep="")
+pct30=1-2*pnorm(0.2,mean=0.4,sd=sqrt(0.008));pct30=paste(round(100*pct30,1),"%",sep="")
+pct100=1-2*pnorm(0.2,mean=0.4,sd=sqrt(0.0024));pct100=paste(round(100*pct100,3),"%",sep="")
+
+
+f1=data.frame(n=c("앞면","뒷면"),p=c(0.4,0.6))
+g1=ggplot(f1,aes(n,p))+geom_bar(stat = "identity",width=0.3) +ylab("확률")+ggtitle("찌그러진 동전 던지기의 확률분포")+annotate("text",  x=Inf, y = Inf, label ="평균: 0.4\n분산: 0.24", vjust=1.5, hjust=1)
+
+
+xl=c(0,0.8)
+g2=ggplot(data.frame(z,d10),aes(z,d10))+geom_line()+xlim(xl)+xlab("표본평균")+ggtitle("10번 던진 평균들")+ylab("Density")+ geom_ribbon(data=subset(data.frame(z,d10), z>=0.2 & z<=0.6),aes(x=z,ymax=d10),ymin=0,fill="red", alpha=0.5)+geom_text(data = NULL, x = 0.4, y = 0.4, label = pct10,size=6)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))+geom_vline(xintercept = 0.6, color = "red", linetype = 2)
+
+g3=ggplot(data.frame(z,d30),aes(z,d30))+geom_line()+xlim(xl)+xlab("표본평균")+ggtitle("30번 던진 평균들")+ylab("Density")+geom_ribbon(data=subset(data.frame(z,d30), z>=0.2 & z<=0.6),aes(x=z,ymax=d30),ymin=0,fill="red", alpha=0.5)+geom_text(data = NULL, x = 0.4, y = 0.5, label = pct30,size=6)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))+geom_vline(xintercept = 0.6, color = "red", linetype = 2)
+
+g4=ggplot(data.frame(z,d100),aes(z,d100))+geom_line()+xlim(xl)+xlab("표본평균")+ggtitle("100번 던진 평균들")+ylab("Density")+geom_ribbon(data=subset(data.frame(z,d100), z>=0.2 & z<=0.6),aes(x=z,ymax=d100),ymin=0,fill="red", alpha=0.5)+geom_text(data = NULL, x = 0.4, y = 1, label = pct100,size=6)+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(size=15,face='bold'))+geom_vline(xintercept = 0.6, color = "red", linetype = 2)
+
+
+grid.arrange(g2,g3,g4,ncol=3)
+```
+
+## Conclusion
+
+- 정규분포의 위대함을 설명하는 3개의 논리, 중심극한정리 고찰
+
+<center>
+
+**정규분포의 위대함**
+
+> by **이항분포**
+
+> by **오차의 법칙**
+
+> by **중심극한정리**
+
+> 시행 횟수/표본 개수 $n$이 커질수록 **표본평균** $\bar{X}$는 $N(\mu,\frac{\sigma^2}{n})$을 따른다.

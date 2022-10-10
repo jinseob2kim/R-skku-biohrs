@@ -1,0 +1,128 @@
+---
+title: "SKKU BIOHRS-MIDTERM Review"
+author: "이건희 조교"
+format: 
+  html:
+    code-background: true
+    toc: true
+    toc-location: left
+    theme: cosmo
+execute:
+  keep-md: false
+  warning: false
+---
+
+## data URL: 아래 url을 불러와 문제를 해결하시오.
+
+"https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/example_g1e.csv"
+
+## R코드와 실행결과를 모두 아래 메일로 보내주십시오.
+
+- lisalee1208@naver.com
+- jinseob2kim@gmail.com
+
+## 필요한 library 및 데이터 불러오기
+
+```{r}
+
+library(data.table);library(magrittr);library(ggpubr);library(rvg);library(officer) 
+a <- fread("https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/example_g1e.csv")
+
+
+```
+
+```{r, echo=F}
+head(a)
+```
+
+## Q1. "Q\_" 로 시작하는 변수는 범주형(factor)으로, 나머지 변수는 숫자형(integer)으로 만드시오.
+
+```{r}
+# "Q_"로 시작하는 변수 추출하는 두 가지 방법 
+var.factor <- names(a)[c(4:12)]  
+# or
+var.factor <- grep("Q_", names(a), value = T)  
+```
+
+```{r}
+var.factor
+```
+
+```{r}
+# 위에서 추출한 변수를 제외한 나머지 변수 추출하는 두 가지 방법 
+var.conti <- setdiff(names(a), var.factor)    
+# or
+var.conti <- names(a)[!(names(a) %in% var.factor)]     # ! = 'not', %in% = 'including'
+
+```
+
+```{r}
+var.conti
+```
+
+```{r}
+# 각각 범주형과 숫자형 변수로 class 설정하는 두 가지 방법
+for (v in var.factor){              # for 반복문 : as.factor() 함수 사용 
+  a[[v]] <- as.factor(a[[v]])
+}
+
+for (v in var.conti){               # for 반복문 : as.numeric() 함수 사용
+  a[[v]] <- as.numeric(a[[v]])
+}
+# or
+a[, (var.factor) := lapply(.SD, as.factor), .SD = var.factor]
+a[, (var.conti) := lapply(.SD, as.numeric), .SD = var.conti]
+
+```
+
+
+```{r}
+# class 잘 변환되었는지 확인하는 방법
+# 답안 제출 시에는 작성할 필요 없음. 
+sapply(a, class)   
+```
+
+## Q2. 연속 변수 "WSTC"와 "BMI"의 연도별 평균 및 표준편차를 구하시오.
+
+```{r}
+# aggregate() 함수 : 데이터의 특정 변수를 기준으로 통계량을 구해주는 함수
+
+# aggregate(data, '기준이 되는 변수', 함수)
+mean <- aggregate(a[,c("WSTC","BMI")], list(a$EXMD_BZ_YYYY), mean)
+sd <- aggregate(a[,c("WSTC","BMI")], list(a$EXMD_BZ_YYYY), sd)
+```
+
+```{r}
+aggregate(a[,c("WSTC","BMI")], list(a$EXMD_BZ_YYYY), mean)
+aggregate(a[,c("WSTC","BMI")], list(a$EXMD_BZ_YYYY), sd)
+```
+
+
+```{r}
+both <- aggregate(cbind(WSTC, BMI) ~ EXMD_BZ_YYYY, data = a, function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+```{r}
+aggregate(cbind(WSTC, BMI) ~ EXMD_BZ_YYYY, data = a, function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+
+## Q3. 연도별 "FBS"를 나타내는 Boxplot을 그리고 pptx로 저장하시오. (x축: "EXMD_BZ_YYYY", y축: "FBS")
+
+```{r}
+# Boxplot 그리기 
+p <- ggboxplot(data= a, x= "EXMD_BZ_YYYY", y= "FBS")
+```
+
+```{r}
+ggboxplot(data= a, x= "EXMD_BZ_YYYY", y= "FBS")
+```
+
+```{r}
+# pptx로 저장하기
+plot_file <- read_pptx() %>%
+  add_slide() %>% ph_with(dml(ggobj = p), location = ph_location_type(type="body"))
+print(plot_file, target = "plot_file.pptx")
+
+```
+
