@@ -16,7 +16,7 @@ lm(status ~ rx, colon) %>% summary %>% .$coefficients
 lm(time ~ rx, colon) %>% anova
 
 
-
+#install.packages(c("jstable", "jskm"))
 library(jstable)
 glm_gaussian <- glm(status ~ sex + age + rx, data = colon, family = binomial)
 glmshow.display(glm_gaussian, decimal = 2)$table

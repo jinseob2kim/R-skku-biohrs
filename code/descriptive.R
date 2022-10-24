@@ -96,6 +96,7 @@ mc.mcnemar <- mcnemar.test(table.mc);mc.mcnemar
 
 
 ## Paired test: >= 3 category
+#install.packages("rcompanion")
 library(rcompanion)
 data(AndersonRainGarden)  # Example data
 AndersonRainGarden
