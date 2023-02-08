@@ -1,0 +1,378 @@
+---
+title: "data.table 실전"
+format: 
+  revealjs:
+    slide-number: true
+editor: visual
+---
+
+## file 읽어오기 {.smaller}
+
+1-1) sas 파일을 fst 파일/csv 파일로 변경
+
+```{r}
+library(haven);library(data.table);library(magrittr);library(knitr);library(kableExtra);library(parallel);library(fst)
+```
+
+```{r, echo = TRUE}
+setDTthreads(0)   # set core number (0: all)
+
+for (v in c("bnc", "bnd", "m20", "m30", "m40", "m60", "inst", "g1e_0208", "g1e_0915")) {
+  # read sas file
+  read_sas(file.path("data", paste0("nsc2_", v, "_1000.sas7bdat"))) %>%
+    # wrtie fst file
+    write_fst(file.path("data", paste0("nsc2_", v, "_1000.fst"))) %>% 
+    # write csv file
+    fwrite(file.path("data", paste0("nsc2_", v, "_1000.csv")))
+}
+```
+
+
+
+<img src="sas_to_fst_csv.png"/>
+
+## file 읽어오기 {.smaller}
+
+1-2) fst파일 / csv 파일 읽어오기
+
+```{r, echo = TRUE}
+# fst 파일 읽어오기
+inst <- read_fst("data/nsc2_inst_1000.fst", as.data.table = T)
+bnc <- read_fst("data/nsc2_bnc_1000.fst", as.data.table = T)
+bnd <- read_fst("data/nsc2_bnd_1000.fst", as.data.table = T)
+m20 <- read_fst("data/nsc2_m20_1000.fst", as.data.table = T)
+m30 <- read_fst("data/nsc2_m30_1000.fst", as.data.table = T)
+m40 <- read_fst("data/nsc2_m40_1000.fst", as.data.table = T)
+m60 <- read_fst("data/nsc2_m60_1000.fst", as.data.table = T)
+g1e_0915 <- read_fst("data/nsc2_g1e_0915_1000.fst", as.data.table = T)
+
+# csv 파일 읽어오기
+inst <- fread("data/nsc2_inst_1000.csv")
+bnc <- fread("data/nsc2_bnc_1000.csv")
+bnd <- fread("data/nsc2_bnd_1000.csv")
+m20 <- fread("data/nsc2_m20_1000.csv")
+m30 <- fread("data/nsc2_m30_1000.csv")
+m40 <- fread("data/nsc2_m40_1000.csv")
+m60 <- fread("data/nsc2_m60_1000.csv")
+g1e_0915 <- fread("data/nsc2_g1e_0915_1000.csv")
+```
+
+## file 읽어오기 {.smaller}
+
+1-3) 데이터 전처리
+
+-   bnd에서 새로운 변수 **Deathdate** 만들기
+
+```{r, echo = TRUE}
+bnd <- bnd[, Deathdate := (lubridate::ym(DTH_YYYYMM) %>% lubridate::ceiling_date(unit = "month") - 1)][]
+```
+
+<br />
+
+```{r}
+head(bnd[!is.na(bnd$DTH_YYYYMM)], 5) %>%
+  kable %>% 
+  column_spec(6, background = "grey", color = "white")
+```
+
+## file 읽어오기 {.smaller}
+
+1-3) 데이터 전처리
+
+-   m40에서 SICK_CLSF_TYPE가 3인 데이터는 제외
+
+```{r, echo = TRUE}
+# 1: 주상병, 2: 부상병, 3: 배제된 상병
+m40 <- m40[SICK_CLSF_TYPE %in% c(1, 2, NA)]   # exclude 3
+```
+
+## Inclusion {.smaller}
+
+Hypertensive disease의 질병코드
+
+```{r, echo = TRUE}
+code.HTN <- paste(paste0("I", 10:15), collapse = "|")
+code.HTN
+```
+
+<br />
+
+**2006년 1월 1일 이후**에 **Hypertensive disease에 대한 진료** 받은 사람만 추출
+
+```{r, echo = TRUE}
+data.start <- m20[like(SICK_SYM1, code.HTN) & (MDCARE_STRT_DT >= 20060101), .(Indexdate = min(MDCARE_STRT_DT)), keyby = "RN_INDI"]
+# 사람 별로 첫 진단일만 뽑음
+```
+
+```{r}
+data.start %>% kable %>% scroll_box(height = "300px")
+```
+
+## Exclusion {.smaller}
+
+**2006년 1월 1일 이전**에 이미 진단 받은 기록이 있는 사람 제외
+
+```{r, echo = TRUE}
+# 제외 대상
+excl <- m40[(MCEX_SICK_SYM %like% code.HTN) & (MDCARE_STRT_DT < 20060101), .SD[1], .SDcols = c("MDCARE_STRT_DT"), keyby = "RN_INDI"]
+```
+
+```{r}
+excl %>% kable %>% scroll_box(height = "200px") %>% kable_styling(font_size = 20)
+```
+
+```{r, echo = TRUE}
+# anti-join으로 excl 제외하고 Indexdate의 타입을 character에서 date로 변경
+data.incl <- data.start[!excl, on = "RN_INDI"][, Indexdate := as.Date(as.character(Indexdate), format = "%Y%m%d")][]
+```
+
+```{r}
+data.incl %>% kable %>% scroll_box(height = "200px") %>% kable_styling(font_size = 20)
+```
+
+## Exclusion {.smaller}
+
+data.incl에 age, sex, death 변수 추가
+
+-   **bnd**에 death 나타내는 변수, **bnc**에 성별 변수 있음 ⇒ data.incl에 추가
+
+```{r, echo = TRUE, `code-line-numbers` = "1-2"}
+data.asd <- merge(bnd, bnc[, .(SEX = SEX[1]), keyby = "RN_INDI"], by = "RN_INDI") %>% 
+  merge(data.incl, by = "RN_INDI") %>%
+  .[, `:=`(Age = year(Indexdate) - as.integer(substr(BTH_YYYY, 1, 4)),
+           Death = as.integer(!is.na(DTH_YYYYMM)),
+           Day_FU = as.integer(pmin(as.Date("2015-12-31"), Deathdate, na.rm = T) - Indexdate))] %>%
+  .[, -c("BTH_YYYY", "DTH_YYYYMM", "Deathdate")]   # 변수 제거
+```
+
+## Exclusion {.smaller}
+
+data.incl에 age, sex, death 변수 추가
+
+-   **Age**: 진단 받았을 때의 나이
+-   **Death**: DTH_YYYMM에 값이 존재하면 사망한 것
+-   **Day_FU**: follow-up한 일수
+
+```{r, echo = TRUE, `code-line-numbers` = "3-5"}
+data.asd <- merge(bnd, bnc[, .(SEX = SEX[1]), keyby = "RN_INDI"], by = "RN_INDI") %>% 
+  merge(data.incl, by = "RN_INDI") %>%
+  .[, `:=`(Age = year(Indexdate) - as.integer(substr(BTH_YYYY, 1, 4)),
+           Death = as.integer(!is.na(DTH_YYYYMM)),  
+           Day_FU = as.integer(pmin(as.Date("2015-12-31"), Deathdate, na.rm = T) - Indexdate))] %>%
+  .[, -c("BTH_YYYY", "DTH_YYYYMM", "Deathdate")]   # 변수 제거
+```
+
+## Exclusion {.smaller}
+
+data.incl에 age, sex, death 변수 추가
+
+```{r, echo = TRUE}
+data.asd <- merge(bnd, bnc[, .(SEX = SEX[1]), keyby = "RN_INDI"], by = "RN_INDI") %>% 
+  merge(data.incl, by = "RN_INDI") %>%
+  .[, `:=`(Age = year(Indexdate) - as.integer(substr(BTH_YYYY, 1, 4)),
+           Death = as.integer(!is.na(DTH_YYYYMM)),  
+           Day_FU = as.integer(pmin(as.Date("2015-12-31"), Deathdate, na.rm = T) - Indexdate))] %>%
+  .[, -c("BTH_YYYY", "DTH_YYYYMM", "Deathdate")]   # 변수 제거
+```
+
+<br />
+
+```{r}
+head(data.asd, 6) %>% kable
+```
+
+## CCI 계산 {.smaller}
+
+> 과거력 list
+
+```{r, echo = TRUE}
+code.cci <- list(
+  MI = c("I21", "I22", "I252"),
+  CHF = c(paste0("I", c("099", 110, 130, 132, 255, 420, 425:429, 43, 50)), "P290"),
+  Peripheral_VD = c(paste0("I", c(70, 71, 731, 738, 739, 771, 790, 792)), paste0("K", c(551, 558, 559)), "Z958", "Z959"),
+  Cerebro_VD = c("G45", "G46", "H340", paste0("I", 60:69)),
+  Dementia = c(paste0("F0", c(0:3, 51)), "G30", "G311"),
+  Chronic_pulmonary_dz = c("I278", "I279", paste0("J", c(40:47, 60:67, 684, 701, 703))),
+  Rheumatologic_dz = paste0("M", c("05", "06", 315, 32:34, 351, 353, 360)),
+  Peptic_ulcer_dz = paste0("K", 25:28),
+  Mild_liver_dz = c("B18", paste0("K", c(700:703, 709, 713:715, 717, 73, 74, 760, 762:764, 768, 769)), "Z944"),
+  DM_no_complication = paste0("E", c(100, 101, 106, 108:111, 116, 118:121, 126, 128:131, 136, 138:141, 146, 148, 149)),
+  DM_complication = paste0("E", c(102:105, 107, 112:115, 117, 122:125, 127, 132:135, 137, 142:145, 147)),
+  Hemi_paraplegia = paste0("G", c("041", 114, 801, 802, 81, 82, 830:834, 839)),
+  Renal_dz = c("I120", "I131", paste0("N", c("032", "033", "034", "035", "036", "037", "052", "053", "054", "055", "056", "057", 18, 19, 250)), paste0("Z", c(490:492, 940, 992))),
+  Malig_with_Leuk_lymphoma = paste0("C", c(paste0("0", 0:9), 10:26, 30:34, 37:41, 43, 45:58, 60:76, 81:85, 88, 90, 97)),
+  Moderate_severe_liver_dz = c(paste0("I", c(85, 859, 864, 982)), paste0("K", c(704, 711, 721, 729, 765:767))),
+  Metastatic_solid_tumor = paste0("C", 77:80),
+  AIDS_HIV = paste0("B", c(20:22, 24)))
+```
+
+## CCI 계산 {.smaller}
+
+각 병에 해당하는 CCI score 지정
+
+```{r, echo = TRUE}
+cciscore <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 6, 6, 2)   # CCI score
+names(cciscore) <- names(code.cci)
+```
+
+<br />
+
+**cciscore**
+
+```{r}
+cciscore
+```
+
+## CCI 계산 {.smaller}
+
+과거력 확인: 첫 진단 날(**inidate**)이 **Indexdate**보다 예전이면 과거에 병력 존재하는 것
+
+```{r, echo = TRUE}
+info.cci <- mclapply(names(code.cci), function(x){
+  merge(data.asd[, .(RN_INDI, Indexdate)], 
+        m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
+        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
+}, mc.cores = 1) %>% do.call(cbind, .) %>% cbind(rowSums(.))
+
+colnames(info.cci) <- c(paste0("Prev_", names(code.cci)), "CCI")   # set column names
+```
+
+<br />
+
+```{r}
+head(info.cci, 5) %>% kable %>% column_spec(18, background = "grey", color = "white")
+```
+
+## 과거 약 복용 이력 확인 {.smaller}
+
+> 과거 확인할 약: Glucocorticoids, Aspirin, Clopidogrel
+
+```{r, echo = TRUE}
+code.drug <- list(
+  Glucocorticoids = c("116401ATB", "140801ATB", "141901ATB", "141903ATB", "160201ATB", "170901ATB", "170906ATB", "193302ATB",
+                      "193305ATB", "217034ASY", "217035ASY", "217001ATB", "243201ATB", "243202ATB", "243203ATB"),
+  Aspirin = c("110701ATB", "110702ATB", "111001ACE", "111001ATE", "489700ACR", "517900ACE", "517900ATE", "667500ACE"),
+  Clopidogrel = c("136901ATB", "492501ATB", "495201ATB", "498801ATB", "501501ATB", "517900ACE", "517900ATE", "667500ACE")
+)
+```
+
+## 과거 약 복용 이력 확인 {.smaller}
+
+약 첫 처방 날(**inidate**)이 **Indexdate**보다 예전이면 과거에 약 복용한 것
+
+```{r, echo = TRUE}
+info.prevmed <- mclapply(code.drug, function(x){
+  merge(data.asd,
+        m60[GNL_NM_CD %in% x][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
+        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev
+}, mc.cores = 1) %>% do.call(cbind, .)
+
+colnames(info.prevmed) <- paste0("Prev_", names(code.drug))   # set column names
+```
+
+<br />
+
+```{r}
+head(info.prevmed, 5) %>% kable
+```
+
+## Outcome {.smaller}
+
+MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**보다 나중이면 발병한 것
+
+-   **MI**: MI 발병했으면 1
+-   **MIday**: MI 발병하기까지 일수
+
+```{r, echo = TRUE}
+info.MI <- merge(data.asd[, .(RN_INDI, Indexdate)], 
+                 m40[like(MCEX_SICK_SYM, paste(code.cci[["MI"]], collapse = "|"))][, .(RN_INDI, MIdate = MDCARE_STRT_DT)],
+                 by = "RN_INDI", all.x = T) %>% 
+  .[Indexdate < as.Date(as.character(MIdate), format = "%Y%m%d")] %>% 
+  .[order(MIdate), .(MI = 1, MIday = as.integer(as.Date(as.character(MIdate), format = "%Y%m%d") - Indexdate)[1]), keyby = "RN_INDI"]
+```
+
+<br />
+
+```{r}
+head(info.MI, 5) %>% kable
+```
+
+# 심화
+
+## 약 복용기간 계산
+
+**Proton-pump inhibitor**: 양성자 펌프 억제제
+
+```{r, echo = TRUE}
+code.ppi <-  c("367201ACH", "367201ATB", "367201ATD", "367202ACH", "367202ATB", 
+               "367202ATD", "498001ACH", "498002ACH", "509901ACH", "509902ACH", 
+               "670700ATB", "204401ACE", "204401ATE", "204402ATE", "204403ATE", 
+               "664500ATB", "640200ATB", "664500ATB", "208801ATE", "208802ATE", 
+               "656701ATE", "519201ATE", "519202ATE", "656701ATE", "519203ATE", 
+               "222201ATE", "222202ATE", "222203ATE", "181301ACE", "181301ATD", 
+               "181302ACE", "181302ATD", "181302ATE", "621901ACR", "621902ACR", 
+               "505501ATE")
+```
+
+## 약 복용기간 계산 {.smaller}
+
+PPI 복용한 데이터만 추출
+
+```{r, echo = TRUE}
+m60.drug <- m60[GNL_NM_CD %in% code.ppi][order(MDCARE_STRT_DT, TOT_MCNT), .SD[.N], keyby = "RN_KEY"]
+
+# MDCARE_STRT_DT의 타입을 date로 변경
+m60.drug[, MDCARE_STRT_DT := lubridate::ymd(MDCARE_STRT_DT)]
+```
+
+<br />
+
+```{r}
+head(m60.drug, 7) %>% kable
+```
+
+## 약 복용기간 계산 {.smaller}
+
+**복용기간 계산 함수**
+
+두 처방 날짜 사이 간격이 gap 이하이면 연속 복용으로 간주함
+
+```{r, echo = TRUE}
+dur_conti <- function(indi, gap = 30){
+  # 약 복용 시작 날짜 + 복용 기간
+  data.ind <- m60.drug[RN_INDI == indi, .(start = MDCARE_STRT_DT, TOT_MCNT)]
+  
+  # 약 복용한 날짜 순서대로 나열
+  datelist <- lapply(1:nrow(data.ind), function(x){data.ind[x, seq(start, start + TOT_MCNT, by = 1)]}) %>% 
+    do.call(c, .) %>% unique %>% sort
+  
+  df <- diff(datelist)   # 날짜 사이 간격
+  df[df <= gap] <- 1   # 간격이 gap 이하이면 연속 복용 
+  
+  # indi + 복용 시작 날짜 + 복용 기간
+  res <- data.table(RN_INDI = indi, 
+                    start = datelist[1],
+                    dur_conti = ifelse(any(df > 1), which(df > 1)[1] - 1, as.integer(sum(df))))
+  return(res)
+}
+```
+
+<br />
+
+```{r, echo = TRUE}
+dur_conti(indi = 80234)
+```
+
+## 약 복용기간 계산 {.smaller}
+
+모든 사람에 대해 함수 적용해 사람마다 약 복용 기간 계산
+
+```{r, echo = TRUE, results = 'hide'}
+mclapply(unique(m60.drug$RN_INDI), dur_conti, mc.cores = 1) %>% rbindlist() %>% .[!is.na(RN_INDI)]
+```
+
+<br />
+
+```{r}
+mclapply(unique(m60.drug$RN_INDI), dur_conti, mc.cores = 1) %>% rbindlist() %>% .[!is.na(RN_INDI)] %>% kable %>% scroll_box(height = "400px")
+```
