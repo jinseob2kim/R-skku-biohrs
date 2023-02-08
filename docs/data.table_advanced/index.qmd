@@ -27,8 +27,6 @@ for (v in c("bnc", "bnd", "m20", "m30", "m40", "m60", "inst", "g1e_0208", "g1e_0
 }
 ```
 
-
-
 <img src="sas_to_fst_csv.png"/>
 
 ## file 읽어오기 {.smaller}
