@@ -8,7 +8,7 @@ editor: visual
 
 ## 기본 문법
 
-<img src="basic.JPG"/>
+<img src="basic.png"/>
 
 -   **i**: 행 선택
 -   **j**: 열 선택 or 함수 적용
@@ -303,7 +303,7 @@ dt2
 
 ## Merge {.smaller}
 
-<img src="join.JPG"/>
+<img src="join.png"/>
 
 ## Merge {.smaller}
 
