@@ -10,9 +10,9 @@ editor: visual
 
 <img src="basic.jpg"/>
 
-- **i**: 행 선택
-- **j**: 열 선택 or 함수 적용
-- **by**: 집단 나눔
+-   **i**: 행 선택
+-   **j**: 열 선택 or 함수 적용
+-   **by**: 집단 나눔
 
 ## fread / fwrite
 
@@ -22,11 +22,9 @@ editor: visual
 library(data.table);library(magrittr)
 ```
 
-
 ```{r, echo = TRUE}
 fread("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
 ```
-
 
 ## Exam data {.smaller}
 
@@ -395,7 +393,6 @@ BMI2 열 **삭제**
 dt[, BMI2 := NULL][]
 ```
 
-
 ## Specific symbol {.smaller}
 
 **.SD**: Subset of Data
@@ -435,6 +432,7 @@ dt[order(EXMD_BZ_YYYY), .SD[1], .SDcols = colvars, keyby = "RN_INDI"]
 ```{r, echo = TRUE}
 dt[, .N, keyby = "RN_INDI"]
 ```
+
 ## melt {.smaller}
 
 <img src="melt.png"/>
@@ -492,4 +490,3 @@ dt.wide2
 dt.wide3 <- dcast(dt.long2, ... ~ variable, value.var = c("BP", "VA"))
 dt.wide3
 ```
-
