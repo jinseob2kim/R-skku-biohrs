@@ -38,7 +38,7 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 |2| 9월 6일  | R 데이터 매니지먼트 [base](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic), [code](code/base.R)  |
 |3|  9월 13일|  R 데이터 매니지먼트 최근: [tidyverse](https://jinseob2kim.github.io/lecture-snuhlab/tidyverse) |
 |4|   9월 20일| R 데이터 매니지먼트: [data.table](https://blog.zarathu.com/posts/2022-02-11-datatable/), [code](code/datatable.R)  |
-|5|  9월 27일 | R 데이터 매니지먼트: [data.table 실전](code/)  |
+|5|  9월 27일 | R 데이터 매니지먼트: [data.table 실전](https://jinseob2kim.github.io/R-skku-biohrs/data.table_advanced/), [code](code/)  |
 |6|  10월 4일| R 데이터 시각화: [강의록](https://blog.zarathu.com/posts/2022-03-25-graph/), [code](code/plot/), [ggplot2 참고자료](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
 |7|  10월 11일| 기초통계이론: 확률(Probability) vs 가능도(Likelihood)([강의록](https://rpubs.com/Statdoc/204928), [슬라이드](https://jinseob2kim.github.io/R-skku-biohrs/likelihood)), 정규분포([강의록](https://rpubs.com/Statdoc/204929), [슬라이드](https://jinseob2kim.github.io/R-skku-biohrs/normal_Distribution))|
 |8|  10월 18일| 중간고사 |
