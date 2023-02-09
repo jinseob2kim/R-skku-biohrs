@@ -1,0 +1,495 @@
+---
+title: "data.table"
+format:
+  revealjs:
+    slide-number: true
+editor: visual
+---
+
+## 기본 문법
+
+<img src="basic.jpg"/>
+
+- **i**: 행 선택
+- **j**: 열 선택 or 함수 적용
+- **by**: 집단 나눔
+
+## fread / fwrite
+
+속도가 매우 빠름 (R의 base 함수보다 40배 더 빠름)
+
+```{r}
+library(data.table);library(magrittr)
+```
+
+
+```{r, echo = TRUE}
+fread("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
+```
+
+
+## Exam data {.smaller}
+
+**data.frame**
+
+```{r, echo = TRUE}
+df <- read.csv("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
+head(df)
+```
+
+```{r, echo = TRUE}
+class(df)
+```
+
+## Exam data {.smaller}
+
+**data.table**
+
+```{r, echo = TRUE}
+dt <- fread("https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/data/example_g1e.csv")
+dt
+```
+
+```{r, echo = TRUE}
+class(dt)
+```
+
+## Row Operation {.smaller}
+
+**첫 번째** 열부터 **다섯 번째** 열까지 선택
+
+```{r, echo = TRUE, results = 'hide'}
+dt[1:5]
+dt[1:5, ]
+```
+
+```{r}
+dt[1:5]
+```
+
+## Row Operation {.smaller}
+
+**EXMD_BZ_YYYY가 2009년-2012년 사이**이고 **BMI가 25 이상**인 행만 추출
+
+```{r, echo = TRUE}
+dt[(EXMD_BZ_YYYY %in% 2009:2012) & (BMI >= 25)]
+```
+
+## Row Operation {.smaller}
+
+**HME_YYYYMM**에 따라 **오름차순**으로 정렬
+
+```{r, echo = TRUE}
+dt[order(HME_YYYYMM)]
+```
+
+## Row Operation {.smaller}
+
+HME_YYYYMM은 오름차순으로, **HGHT**는 **내림차순**으로 정렬
+
+```{r, echo = TRUE}
+dt[order(HME_YYYYMM, -HGHT)]
+```
+
+## Row Operation {.smaller}
+
+**EXMD_BZ_YYYY가 2009년-2012년 사이**이고 **BMI가 25 이상**인 행만 추출한 후
+
+**HGHT**에 따라 **오름차순**으로 정렬
+
+```{r, echo = TRUE, results = 'hide'}
+dt[(EXMD_BZ_YYYY %in% 2009:2012) & (BMI >= 25)][order(HGHT)]
+dt[(EXMD_BZ_YYYY %in% 2009:2012) & (BMI >= 25)] %>% .[order(HGHT)]   # same
+```
+
+```{r}
+dt[(EXMD_BZ_YYYY %in% 2009:2012) & (BMI >= 25)][order(HGHT)]
+```
+
+## Column Operation {.smaller}
+
+**첫 번째 열**부터 **다섯 번째 열**까지 추출
+
+```{r, echo = TRUE}
+dt[, 1:5]
+```
+
+## Column Operation {.smaller}
+
+**HGHT 열**과 **WGHT 열**만 추출
+
+```{r, echo = TRUE, results = 'hide'}
+dt[, c("HGHT", "WGHT")]
+dt[, .(HGHT, WGHT)]
+```
+
+```{r}
+dt[, .(HGHT, WGHT)]
+```
+
+## Column Operation {.smaller}
+
+HGHT 열을 Height로, WGHT 열을 Weight로 **이름을 바꿔서** 추출
+
+```{r, echo = TRUE}
+dt[, .(Height = HGHT, Weight = WGHT)]   # rename
+```
+
+## Column Operation {.smaller}
+
+**data.table 형식**으로 추출
+
+```{r, echo = TRUE, results = 'hide'}
+dt[, .(HGHT)]
+dt[, "HGHT"]
+```
+
+```{r}
+dt[, .(HGHT)]
+```
+
+## Column Operation {.smaller}
+
+**vector 형식**으로 추출
+
+```{r, echo = TRUE}
+dt[, HGHT]   # vector
+```
+
+## Column Operation {.smaller}
+
+**변수**로 열 이름 선택
+
+```{r, echo = TRUE}
+colvars <- grep("Q_", names(dt), value = T)
+colvars
+```
+
+```{r, echo = TRUE, results = 'hide'}
+dt[, ..colvars]
+dt[, colvars, with = F]
+```
+
+```{r}
+dt[, ..colvars]
+```
+
+## Column Operation {.smaller}
+
+**.SD**: Subset of Data
+
+```{r, echo = TRUE}
+dt[, .SD, .SDcols = colvars]
+```
+
+## Column Operation {.smaller}
+
+**EXMD_BZ_YYYY가 2009년-2012년 사이**이고 **BMI가 25 이상**인 행 중 **colvars** 열만 추출
+
+```{r, echo = TRUE}
+dt[(EXMD_BZ_YYYY %in% 2009:2012) & (BMI >= 25), ..colvars]
+```
+
+## Column Operation {.smaller}
+
+**colvars** 열 제외
+
+```{r, echo = TRUE, results = 'hide'}
+dt[, !..colvars]
+dt[, -..colvars]
+dt[, .SD, .SDcols = -colvars]
+```
+
+```{r}
+dt[, !..colvars]
+```
+
+## Column Summary {.smaller}
+
+HGHT의 평균, WGHT의 평균, BMI의 평균
+
+```{r, echo = TRUE}
+dt[, .(mean(HGHT), mean(WGHT), mean(BMI))]
+```
+
+## Column Summary {.smaller}
+
+HGHT의 평균, WGHT의 평균, BMI의 평균을 이름 지정해서 출력
+
+```{r, echo = TRUE}
+dt[, .(HGHT = mean(HGHT), WGHT = mean(WGHT), BMI = mean(BMI))]
+```
+
+## Column Summary {.smaller}
+
+lapply로 HGHT, WGHT, BMI에 **한번에** mean 함수 적용
+
+```{r, echo = TRUE}
+dt[, lapply(.SD, mean), .SDcols = c("HGHT", "WGHT", "BMI")]
+```
+
+## By Operation {.smaller}
+
+EXMD_BZ_YYYY으로 **그룹화**하여 HGHT의 평균, WGHT의 평균, BMI의 평균 구하기
+
+```{r, echo = TRUE, results = 'hide'}
+dt[, .(HGHT = mean(HGHT), WGHT = mean(WGHT), BMI = mean(BMI)), by = EXMD_BZ_YYYY]
+dt[, .(HGHT = mean(HGHT), WGHT = mean(WGHT), BMI = mean(BMI)), by = "EXMD_BZ_YYYY"]
+dt[, lapply(.SD, mean), .SDcols = c("HGHT", "WGHT", "BMI"), by = EXMD_BZ_YYYY]
+```
+
+```{r}
+dt[, .(HGHT = mean(HGHT), WGHT = mean(WGHT), BMI = mean(BMI)), by = EXMD_BZ_YYYY]
+```
+
+## By Operation {.smaller}
+
+HGHT가 175 이상인 데이터를 EXMD_BZ_YYYY, Q_SMK_YN으로 **그룹화**하여 개수 구함
+
+**.N**: length()
+
+```{r, echo = TRUE, results = 'hide'}
+dt[HGHT >= 175, .N, by = .(EXMD_BZ_YYYY, Q_SMK_YN)]
+dt[HGHT >= 175, .N, by = c("EXMD_BZ_YYYY", "Q_SMK_YN")]
+```
+
+```{r}
+dt[HGHT >= 175, .N, by = .(EXMD_BZ_YYYY, Q_SMK_YN)]
+```
+
+## By Operation {.smaller}
+
+keyby를 통해 **정렬**할 수 있음
+
+```{r, echo = TRUE}
+dt[HGHT >= 175, .N, keyby = c("EXMD_BZ_YYYY", "Q_SMK_YN")]
+```
+
+## By Operation {.smaller}
+
+**조건**으로 그룹화할 수도 있음
+
+```{r, echo = TRUE}
+dt[HGHT >= 175, .N, keyby= .(EXMD_BZ_YYYY >= 2015, Q_PHX_DX_STK == 1)]
+```
+
+## By Operation {.smaller}
+
+**조건**으로 그룹화할 수도 있음
+
+```{r, echo = TRUE}
+dt[HGHT >= 175, .N, keyby= .(get("EXMD_BZ_YYYY") >= 2015, get("Q_PHX_DX_STK") == 1)]
+```
+
+## By Operation {.smaller}
+
+**조건**으로 그룹화할 수도 있음
+
+```{r, echo = TRUE}
+dt[HGHT >= 175, .N, keyby= .(Y2015 = ifelse(EXMD_BZ_YYYY >= 2015, ">=2015", "<2015"))]
+```
+
+## Merge {.smaller}
+
+예시 데이터
+
+```{r, echo = TRUE}
+dt1 <- dt[1:10, .SD, .SDcols = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM", colvars)]
+dt1
+```
+
+```{r, echo = TRUE}
+dt2 <- dt[6:15, -..colvars]
+dt2
+```
+
+## Merge {.smaller}
+
+<img src="join.jpg"/>
+
+## Merge {.smaller}
+
+**Full join**
+
+```{r, echo = TRUE}
+merge(dt1, dt2, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all = T)
+```
+
+## Merge {.smaller}
+
+**Inner join**
+
+```{r, echo = TRUE}
+merge(dt1, dt2, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all = F)
+```
+
+## Merge {.smaller}
+
+**Left join**
+
+```{r, echo = TRUE}
+merge(dt1, dt2, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all.x = T)
+```
+
+## Merge {.smaller}
+
+**Left join** 다른 방법
+
+```{r, echo = TRUE}
+dt2[dt1, on = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM")]
+```
+
+## Merge {.smaller}
+
+**Right join**
+
+```{r, echo = TRUE}
+merge(dt1, dt2, by = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"), all.y = T)
+```
+
+## Merge {.smaller}
+
+**Right join** 다른 방법
+
+```{r, echo = TRUE}
+dt1[dt2, on = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM")]
+```
+
+## Merge {.smaller}
+
+**Left anti join**
+
+```{r, echo = TRUE}
+dt1[!dt2, on = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM")]
+```
+
+## Merge {.smaller}
+
+**Right anti join**
+
+```{r, echo = TRUE}
+dt2[!dt1, on = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM")]
+```
+
+## Mutate {.smaller}
+
+새로운 변수 생성
+
+```{r, echo = TRUE}
+dt[, BMI2 := round(WGHT/(HGHT/100)^2, 1)][]
+```
+
+## Mutate {.smaller}
+
+새로운 변수 생성
+
+```{r, echo = TRUE}
+dt[, `:=`(BP_SYS140 = factor(as.integer(BP_SYS >= 140)), BMI25 = factor(as.integer(BMI >= 25)))][]
+```
+
+## Mutate {.smaller}
+
+BMI2 열 **삭제**
+
+```{r, echo = TRUE}
+dt[, BMI2 := NULL][]
+```
+
+
+## Specific symbol {.smaller}
+
+**.SD**: Subset of Data
+
+```{r, echo = TRUE}
+dt[, .SD]   # all column
+```
+
+## Specific symbol {.smaller}
+
+**.SD**: Subset of Data
+
+```{r, echo = TRUE}
+dt[, lapply(.SD, class)]
+```
+
+## Specific symbol {.smaller}
+
+**.SD**: Subset of Data
+
+```{r, echo = TRUE}
+dt[order(EXMD_BZ_YYYY), .SD[1], keyby = "RN_INDI"]
+```
+
+## Specific symbol {.smaller}
+
+**.SDcols**: 연산 대상이 되는 특정 열 지정
+
+```{r, echo = TRUE}
+dt[order(EXMD_BZ_YYYY), .SD[1], .SDcols = colvars, keyby = "RN_INDI"]
+```
+
+## Specific symbol {.smaller}
+
+**.N**: length()
+
+```{r, echo = TRUE}
+dt[, .N, keyby = "RN_INDI"]
+```
+## melt {.smaller}
+
+<img src="melt.png"/>
+
+## melt {.smaller}
+
+일부 열을 제외한 나머지 열을 **stack 처리**
+
+```{r, echo = TRUE}
+dt.long1 <- melt(dt, 
+                 id.vars = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"),   # 고정할 열
+                 measure.vars = c("TOT_CHOL", "TG", "HDL", "LDL"),   # 재구조화할 열
+                 variable.name = "Lipid",   # 재구조화한 후 variable 열의 이름
+                 value.name = "Value")   # 재구조화한 후 value 열의 이름
+dt.long1
+```
+
+## melt {.smaller}
+
+동시에 여러 개의 열로 melt 가능
+
+```{r, echo = TRUE}
+col1 <- c("BP_SYS", "BP_DIA")
+col2 <- c("VA_LT", "VA_RT")
+dt.long2 <- melt(dt,
+                 id.vars = c("EXMD_BZ_YYYY", "RN_INDI", "HME_YYYYMM"),
+                 measure = list(col1, col2),
+                 value.name = c("BP", "VA"))
+dt.long2
+```
+
+## dcast {.smaller}
+
+melt 함수로 재구조화한 것을 다시 **분리**
+
+```{r, echo = TRUE}
+dt.wide1 <- dcast(dt.long1, EXMD_BZ_YYYY + RN_INDI + HME_YYYYMM ~ Lipid, value.var = "Value")
+dt.wide1
+```
+
+## dcast {.smaller}
+
+그룹별 요약 통계량을 계산한 결과를 재구조화하여 반환
+
+```{r, echo = TRUE}
+dt.wide2 <- dcast(dt.long1, RN_INDI ~ Lipid, value.var = "Value", fun.aggregate = mean, na.rm =T)
+dt.wide2
+```
+
+## dcast {.smaller}
+
+여러 열을 동시에 dcast 가능
+
+```{r, echo = TRUE}
+dt.wide3 <- dcast(dt.long2, ... ~ variable, value.var = c("BP", "VA"))
+dt.wide3
+```
+
