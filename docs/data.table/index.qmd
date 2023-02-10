@@ -439,7 +439,7 @@ dt[, .N, keyby = "RN_INDI"]
 
 ## melt {.smaller}
 
-일부 열을 제외한 나머지 열을 **stack 처리**
+wide to long
 
 ```{r, echo = TRUE}
 dt.long1 <- melt(dt, 
@@ -466,7 +466,7 @@ dt.long2
 
 ## dcast {.smaller}
 
-melt 함수로 재구조화한 것을 다시 **분리**
+long to wide
 
 ```{r, echo = TRUE}
 dt.wide1 <- dcast(dt.long1, EXMD_BZ_YYYY + RN_INDI + HME_YYYYMM ~ Lipid, value.var = "Value")
