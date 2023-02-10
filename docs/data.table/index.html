@@ -396,7 +396,7 @@
 <section id="기본-문법" class="slide level2">
 <h2>기본 문법</h2>
 
-<img src="basic.JPG" class="r-stretch"><ul>
+<img src="basic.png" class="r-stretch"><ul>
 <li><strong>i</strong>: 행 선택</li>
 <li><strong>j</strong>: 열 선택 or 함수 적용</li>
 <li><strong>by</strong>: 집단 나눔</li>
@@ -1404,7 +1404,7 @@
 <section id="merge-1" class="slide level2 smaller">
 <h2>Merge</h2>
 
-<img src="join.JPG" class="r-stretch"></section>
+<img src="join.png" class="r-stretch"></section>
 <section id="merge-2" class="slide level2 smaller">
 <h2>Merge</h2>
 <p><strong>Full join</strong></p>
@@ -2129,7 +2129,7 @@
 <img src="melt.png" class="r-stretch"></section>
 <section id="melt-1" class="slide level2 smaller">
 <h2>melt</h2>
-<p>일부 열을 제외한 나머지 열을 <strong>stack 처리</strong></p>
+<p>wide to long</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>dt.long1 <span class="ot">&lt;-</span> <span class="fu">melt</span>(dt, </span>
 <span id="cb95-2"><a href="#cb95-2"></a>                 <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"EXMD_BZ_YYYY"</span>, <span class="st">"RN_INDI"</span>, <span class="st">"HME_YYYYMM"</span>),   <span class="co"># 고정할 열</span></span>
@@ -2182,7 +2182,7 @@
 </section>
 <section id="dcast" class="slide level2 smaller">
 <h2>dcast</h2>
-<p>melt 함수로 재구조화한 것을 다시 <strong>분리</strong></p>
+<p>long to wide</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>dt.wide1 <span class="ot">&lt;-</span> <span class="fu">dcast</span>(dt.long1, EXMD_BZ_YYYY <span class="sc">+</span> RN_INDI <span class="sc">+</span> HME_YYYYMM <span class="sc">~</span> Lipid, <span class="at">value.var =</span> <span class="st">"Value"</span>)</span>
 <span id="cb99-2"><a href="#cb99-2"></a>dt.wide1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
