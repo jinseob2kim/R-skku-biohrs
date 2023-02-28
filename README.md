@@ -76,3 +76,5 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 ```r
 install.packages(c("data.table", "magrittr", "fst", "ggplot2", "ggpubr", "officer", "rvg", "tableone", "gtsummary", "MatchIt", "twang", "usethis", "gitcreds"))
 ```
+
+[강의영상](https://drive.google.com/drive/folders/1WgTKuTyLyJfiiaZmWoEZVZhP3y16HOAg?usp=sharing)
