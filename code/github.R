@@ -18,7 +18,7 @@
 ### 3. Configure git with Rstudio ############################################
 
 ## Name, email
-usethis::use_git_config(user.name = "sehee-lim", user.email = "sehee0706@naver.com")
+usethis::use_git_config(user.name = "jinseob kim", user.email = "jinseob2kim@gmail.com")
 
 ## setting: permanent storage
 credentials::credential_helper_set("manager")                 # Windows
