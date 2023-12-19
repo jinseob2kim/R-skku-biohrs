@@ -65,16 +65,19 @@ R 은 단순한 통계프로그램이 아닌 데이터분석 전 과정을 포�
 
 > 2. 위쪽 __*"Projects"*__ 클릭 후, __*"New Project"*__ 를 눌러 __*"New Project from Git Repo"*__ 를 선택 후, Repo 주소 **https://github.com/jinseob2kim/R-skku-biohrs** 입력.
 
-
-
-**[실습데이터 및 설명자료 다운로드](https://1drv.ms/u/s!AvwFxLQIpBXdhf0B_wedH9jP7D6sHg?e=YXzS0e)**
-
-[심평원 약품성분명코드](https://www.data.go.kr/data/15067461/fileData.do)
-
 아래 패키지들을 미리 설치하면 좋다.
 
 ```r
 install.packages(c("data.table", "magrittr", "fst", "ggplot2", "ggpubr", "officer", "rvg", "tableone", "gtsummary", "MatchIt", "twang", "usethis", "gitcreds"))
 ```
 
-[강의영상](https://drive.google.com/drive/folders/1WgTKuTyLyJfiiaZmWoEZVZhP3y16HOAg?usp=sharing)
+## 참고자료
+
+**[실습데이터 및 설명자료 다운로드](https://1drv.ms/u/s!AvwFxLQIpBXdhf0B_wedH9jP7D6sHg?e=YXzS0e)**
+
+[심평원 약품성분명코드](https://www.data.go.kr/data/15067461/fileData.do)
+
+
+
+## 강의영상
+https://www.youtube.com/playlist?list=PLe9JpZdWdsL3pKvV31D2xmnboBymGUVDz
