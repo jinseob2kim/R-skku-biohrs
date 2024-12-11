@@ -13,9 +13,17 @@ code.drug <- list(
 )
 
 
+# info.prevmed <- mclapply(code.drug, function(x){
+#   merge(data.asd,
+#         m60[GNL_NM_CD %in% x][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
+#         by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate >= as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev
+# }, mc.cores = 3) %>% do.call(cbind, .)
+# colnames(info.prevmed) <- paste0("Prev_", names(code.drug))
+
+# rolling merge in 365 days 위의 결과와 같게 하려면 roll=Inf, 365일 내로 보려면 roll=365
 info.prevmed <- mclapply(code.drug, function(x){
-  merge(data.asd,
-        m60[GNL_NM_CD %in% x][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
-        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev
+  data.asd[, MDCARE_STRT_DT := Indexdate]
+  dt <- m60[GNL_NM_CD %in% x][, MDCARE_STRT_DT := as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d")][, .(RN_INDI, MDCARE_STRT_DT, inidate = MDCARE_STRT_DT)] 
+  dt[, .SD[1], keyby = c("RN_INDI", "MDCARE_STRT_DT")][data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365][, ev := as.integer(!is.na(inidate))][]$ev
 }, mc.cores = 3) %>% do.call(cbind, .)
 colnames(info.prevmed) <- paste0("Prev_", names(code.drug))
