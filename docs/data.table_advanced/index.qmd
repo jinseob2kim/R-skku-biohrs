@@ -256,7 +256,7 @@ code.drug <- list(
 
 ## 과거 약 복용 이력 확인 {.smaller}
 
-**Indexdate**를 기준으로 365일 내로 약 처방일 기록(**inidate**)이 존재하면  보다 예전이면 과거에 약 복용한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option을 사용
+**Indexdate**를 기준으로 365일 내로 약 처방일 기록(**inidate**)이 존재하면 보다 예전이면 과거에 약 복용한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option을 사용
 
 ```{r, echo = TRUE}
 info.prevmed <- mclapply(code.drug, function(x){
@@ -276,7 +276,7 @@ head(info.prevmed, 5) %>% kable
 
 ## Outcome {.smaller}
 
-MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**을 기준으로 365일 내에 기록이 있으면 발병한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option을 사용
+MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**을 기준으로 그 뒤에 기록이 있으면 발병한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option 중 -Inf을 사용
 
 -   **MI**: MI 발병했으면 1
 -   **MIday**: MI 발병하기까지 일수
@@ -285,7 +285,7 @@ MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**을 �
 data.asd[, MDCARE_STRT_DT := Indexdate]
 info.MI <- m40 %>% 
   .[like(MCEX_SICK_SYM, paste(code.cci[["MI"]], collapse = "|")), .(RN_INDI, MDCARE_STRT_DT = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"), MIdate = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"))] %>%
-  .[data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365] %>% 
+  .[data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = -Inf] %>% 
   .[Indexdate <= MIdate] %>% 
   .[order(MIdate), .(MI = 1, MIday = as.integer(MIdate - Indexdate)[1]), keyby = "RN_INDI"]
 ```

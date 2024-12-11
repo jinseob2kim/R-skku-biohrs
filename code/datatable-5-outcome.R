@@ -6,11 +6,11 @@ source("code/inclusion.R")
 #   .[Indexdate <= as.Date(as.character(MIdate), format = "%Y%m%d")] %>% 
 #   .[order(MIdate), .(MI = 1, MIday = as.integer(as.Date(as.character(MIdate), format = "%Y%m%d") - Indexdate)[1]), keyby = "RN_INDI"]
 
-# rolling merge in 365 days 위의 결과와 같게 하려면 roll=-Inf, 365일 내로 보려면 roll=365
+# rolling merge 위의 결과와 같게 하려면 roll=-Inf, 365일 내로 보려면 roll=365
 data.asd[, MDCARE_STRT_DT := Indexdate]
 info.MI <- m40 %>% 
   .[like(MCEX_SICK_SYM, paste(code.cci[["MI"]], collapse = "|")), .(RN_INDI, MDCARE_STRT_DT = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"), MIdate = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"))] %>%
-  .[data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365] %>% 
+  .[data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = -Inf] %>% 
   .[Indexdate <= MIdate] %>% 
   .[order(MIdate), .(MI = 1, MIday = as.integer(MIdate - Indexdate)[1]), keyby = "RN_INDI"]
 
