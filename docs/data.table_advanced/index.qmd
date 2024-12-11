@@ -223,14 +223,14 @@ cciscore
 
 ## CCI 계산 {.smaller}
 
-과거력 확인: 첫 진단 날(**inidate**)이 **Indexdate**보다 예전이면 과거에 병력 존재하는 것
+과거력 확인: Indexdate를 기준으로 365일 내로 진단 날(**Incidate**)이 존재하면 과거에 병력 존재하는 것으로 간주 - 이 경우 Indexdate와 Incidate를 이어주기 위해 data.table의 roll option을 사용
 
 ```{r, echo = TRUE}
 info.cci <- mclapply(names(code.cci), function(x){
-  merge(data.asd[, .(RN_INDI, Indexdate)], 
-        m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
-        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
-}, mc.cores = 1) %>% do.call(cbind, .) %>% cbind(rowSums(.))
+  data.asd[, MDCARE_STRT_DT := Indexdate]
+  dt <- m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][, MDCARE_STRT_DT := as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d")][, .(RN_INDI, MDCARE_STRT_DT, Incidate = MDCARE_STRT_DT)]  
+  dt[, .SD[1], keyby = c("RN_INDI", "MDCARE_STRT_DT")][data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365][, ev := as.integer(!is.na(Incidate))][]$ev * cciscore[x]
+}, mc.cores = 4) %>%  do.call(cbind, .) %>% cbind(rowSums(.))
 
 colnames(info.cci) <- c(paste0("Prev_", names(code.cci)), "CCI")   # set column names
 ```
@@ -256,16 +256,16 @@ code.drug <- list(
 
 ## 과거 약 복용 이력 확인 {.smaller}
 
-약 첫 처방 날(**inidate**)이 **Indexdate**보다 예전이면 과거에 약 복용한 것
+**Indexdate**를 기준으로 365일 내로 약 처방일 기록(**inidate**)이 존재하면 보다 예전이면 과거에 약 복용한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option을 사용
 
 ```{r, echo = TRUE}
 info.prevmed <- mclapply(code.drug, function(x){
-  merge(data.asd,
-        m60[GNL_NM_CD %in% x][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
-        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev
-}, mc.cores = 1) %>% do.call(cbind, .)
+  data.asd[, MDCARE_STRT_DT := Indexdate]
+  dt <- m60[GNL_NM_CD %in% x][, MDCARE_STRT_DT := as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d")][, .(RN_INDI, MDCARE_STRT_DT, inidate = MDCARE_STRT_DT)] 
+  dt[, .SD[1], keyby = c("RN_INDI", "MDCARE_STRT_DT")][data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365][, ev := as.integer(!is.na(inidate))][]$ev
+}, mc.cores = 3) %>% do.call(cbind, .)
 
-colnames(info.prevmed) <- paste0("Prev_", names(code.drug))   # set column names
+colnames(info.prevmed) <- paste0("Prev_", names(code.drug))  # set column names
 ```
 
 <br />
@@ -276,17 +276,18 @@ head(info.prevmed, 5) %>% kable
 
 ## Outcome {.smaller}
 
-MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**보다 나중이면 발병한 것
+MI 발병했는지 확인: MI가 발병한 날(**MIdate**)이 **Indexdate**을 기준으로 그 뒤에 기록이 있으면 발병한 것으로 간주 - 이 경우 Indexdate와 inidate를 이어주기 위해 data.table의 roll option 중 -Inf을 사용
 
 -   **MI**: MI 발병했으면 1
 -   **MIday**: MI 발병하기까지 일수
 
 ```{r, echo = TRUE}
-info.MI <- merge(data.asd[, .(RN_INDI, Indexdate)], 
-                 m40[like(MCEX_SICK_SYM, paste(code.cci[["MI"]], collapse = "|"))][, .(RN_INDI, MIdate = MDCARE_STRT_DT)],
-                 by = "RN_INDI", all.x = T) %>% 
-  .[Indexdate < as.Date(as.character(MIdate), format = "%Y%m%d")] %>% 
-  .[order(MIdate), .(MI = 1, MIday = as.integer(as.Date(as.character(MIdate), format = "%Y%m%d") - Indexdate)[1]), keyby = "RN_INDI"]
+data.asd[, MDCARE_STRT_DT := Indexdate]
+info.MI <- m40 %>% 
+  .[like(MCEX_SICK_SYM, paste(code.cci[["MI"]], collapse = "|")), .(RN_INDI, MDCARE_STRT_DT = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"), MIdate = as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d"))] %>%
+  .[data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = -Inf] %>% 
+  .[Indexdate <= MIdate] %>% 
+  .[order(MIdate), .(MI = 1, MIday = as.integer(MIdate - Indexdate)[1]), keyby = "RN_INDI"]
 ```
 
 <br />

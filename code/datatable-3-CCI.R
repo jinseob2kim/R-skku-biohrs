@@ -27,12 +27,17 @@ code.cci <- list(
 cciscore <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 6, 6, 2)
 names(cciscore) <- names(code.cci)
 
+# info.cci <- mclapply(names(code.cci), function(x){
+#   merge(data.asd[, .(RN_INDI, Indexdate)], 
+#         m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
+#         by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate >= as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
+# }, mc.cores = 4) %>% do.call(cbind, .) %>% cbind(rowSums(.))
+# colnames(info.cci) <- c(paste0("Prev_", names(code.cci)), "CCI")
 
-
+# rolling merge in 365 days 위의 결과와 같게 하려면 roll=Inf, 365일 내로 보려면 roll=365
 info.cci <- mclapply(names(code.cci), function(x){
-  merge(data.asd[, .(RN_INDI, Indexdate)], 
-        m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][order(MDCARE_STRT_DT), .SD[1], keyby = "RN_INDI"][, .(RN_INDI, inidate = MDCARE_STRT_DT)],
-        by = "RN_INDI", all.x = T)[, ev := as.integer(Indexdate > as.Date(as.character(inidate), format = "%Y%m%d"))][, ev := ifelse(is.na(ev), 0, ev)][]$ev * cciscore[x]
-}, mc.cores = 4) %>% do.call(cbind, .) %>% cbind(rowSums(.))
+  data.asd[, MDCARE_STRT_DT := Indexdate]
+  dt <- m40[like(MCEX_SICK_SYM, paste(code.cci[[x]], collapse = "|"))][, MDCARE_STRT_DT := as.Date(as.character(MDCARE_STRT_DT), format = "%Y%m%d")][, .(RN_INDI, MDCARE_STRT_DT, Incidate = MDCARE_STRT_DT)]  
+  dt[, .SD[1], keyby = c("RN_INDI", "MDCARE_STRT_DT")][data.asd, on = c("RN_INDI", "MDCARE_STRT_DT"), roll = 365][, ev := as.integer(!is.na(Incidate))][]$ev * cciscore[x]
+}, mc.cores = 4) %>%  do.call(cbind, .) %>% cbind(rowSums(.))
 colnames(info.cci) <- c(paste0("Prev_", names(code.cci)), "CCI")
-
